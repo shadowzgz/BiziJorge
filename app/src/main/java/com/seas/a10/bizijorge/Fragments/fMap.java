@@ -17,11 +17,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.seas.a10.bizijorge.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragmento que contiene el mapa en el que se muestran todas las estaciones de Bizi Zaragoza
+ *
+ * https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta?rf=html&srsname=wgs84&start=0&point=-0.8774209607549572%2C41.65599799116259&distance=5000
  */
 public class fMap extends Fragment {
 
-    String stringpurbea;
 
     MapView mMapView;
     private GoogleMap googleMap;
