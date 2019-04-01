@@ -21,6 +21,8 @@ import com.seas.a10.bizijorge.R;
  */
 public class fMap extends Fragment {
 
+    String stringpurbea;
+
     MapView mMapView;
     private GoogleMap googleMap;
 //    SupportMapFragment supportMapFragment;
@@ -42,7 +44,7 @@ public class fMap extends Fragment {
 //            ft.replace(R.id.fMap,supportMapFragment).commit();
 //        }
 //        supportMapFragment.getMapAsync(this);
-        mMapView = (MapView) v.findViewById(R.id.mapView);
+        mMapView =  v.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
 //        Cargamos el mapa en el momento.
