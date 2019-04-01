@@ -44,7 +44,7 @@ public class fMap extends Fragment {
 //            ft.replace(R.id.fMap,supportMapFragment).commit();
 //        }
 //        supportMapFragment.getMapAsync(this);
-        mMapView =  v.findViewById(R.id.mapView);
+        mMapView = v.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
 //        Cargamos el mapa en el momento.
