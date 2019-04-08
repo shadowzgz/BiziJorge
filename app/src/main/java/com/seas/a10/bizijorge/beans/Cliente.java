@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Cliente {
-    //region variables
+    //region variables m
     private int idUsuario;
     private String email;
     private String pass;
