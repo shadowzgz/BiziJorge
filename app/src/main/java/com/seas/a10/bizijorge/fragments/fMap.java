@@ -1,4 +1,4 @@
-package com.seas.a10.bizijorge.Fragments;
+package com.seas.a10.bizijorge.fragments;
 
 
 import android.Manifest;
@@ -6,16 +6,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -23,15 +19,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.seas.a10.bizijorge.R;
-
-import java.util.concurrent.Executor;
 
 import static android.content.ContentValues.TAG;
 
@@ -81,7 +73,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         mMap = map;
 
 
-        getLocationPermission();
+        //getLocationPermission();
 
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
@@ -166,7 +158,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         mLocationPermissionGranted = false;
-
+        Log.d("MENSAJEEEEEEE", "SE HA LLAMADO CORRECTAMENTE AL CALLBACKKKKKK!!!!!!!!!!!!");
         switch (requestCode) {
             case 1: {
                 // If request is cancelled, the result arrays are empty.

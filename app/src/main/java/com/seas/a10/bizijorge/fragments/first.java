@@ -1,4 +1,4 @@
-package com.seas.a10.bizijorge.Fragments;
+package com.seas.a10.bizijorge.fragments;
 
 
 import android.os.Bundle;
