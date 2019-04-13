@@ -3,8 +3,10 @@ package com.seas.a10.bizijorge;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,15 +16,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.seas.a10.bizijorge.beans.Cliente;
+import com.seas.a10.bizijorge.data.sData;
 import com.seas.a10.bizijorge.fragments.fMap;
 import com.seas.a10.bizijorge.fragments.first;
 
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    /*Contexto*/
+
+    //region Variables
+    Cliente cliente = sData.getCliente();
     private static Context context;
+    private NavigationView navigationView;
+    TextView name = null;
+    TextView email = null;
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +59,14 @@ public class MenuActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
-
+        //Creamos el navigation view
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //Establecemos el nombre y usuario en el menú
+        View header = navigationView.getHeaderView(0);
+        name = (TextView)header.findViewById(R.id.tvNavMenuUsername);       ;
+        email = (TextView) header.findViewById(R.id.tvNavMenuEmail);
+       setClientDataOnMenu();
     }
 
     @Override
@@ -89,6 +105,7 @@ public class MenuActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
+
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
@@ -104,15 +121,31 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
-
+            Intent intentRegister = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(intentRegister);
         } else if (id == R.id.nav_send) {
-
+            Intent intentRegister = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intentRegister);
         }
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setClientDataOnMenu(){
+
+        if(cliente != null){
+            name.setText(cliente.getName().toString());
+            email.setText(cliente.getEmail().toString());
+        } else {
+            name.setText("UNKNOWN");
+            email.setText("UNKNOWN");
+        }
+
+
     }
 
 

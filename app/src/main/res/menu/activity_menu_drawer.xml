@@ -6,8 +6,8 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:icon="@drawable/map"
+            android:title="Mapa" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
@@ -25,13 +25,18 @@
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:icon="@drawable/ic_login"
+                android:title="Entrar" />
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_register"
+                android:title="Registrarse" />
+            <item
+                android:id="@+id/nav_log_out"
+                android:icon="@android:drawable/ic_lock_power_off"
+                android:title="Registrarse" />
+
         </menu>
     </item>
 

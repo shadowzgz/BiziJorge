@@ -4,16 +4,16 @@ import com.seas.a10.bizijorge.beans.Cliente;
 
 public class sData {
 
-    private Cliente  cliente;
+    private static Cliente  cliente;
 
 
     //region Getters y setters
 
-    public Cliente getCliente() {
+    public static Cliente getCliente() {
         return cliente;
     }
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public static void setCliente(Cliente cliente) {
+        sData.cliente = cliente;
     }
 
 
