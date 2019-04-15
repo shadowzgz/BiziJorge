@@ -2,8 +2,12 @@ package com.seas.a10.bizijorge.fragments;
 
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -23,7 +28,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.seas.a10.bizijorge.LoginActivity;
 import com.seas.a10.bizijorge.R;
+import com.seas.a10.bizijorge.RegisterActivity;
+import com.seas.a10.bizijorge.beans.Estacion;
+import com.seas.a10.bizijorge.utils.Post;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import static android.content.ContentValues.TAG;
 
@@ -34,16 +56,25 @@ import static android.content.ContentValues.TAG;
  */
 public class fMap extends Fragment implements OnMapReadyCallback {
 
+    //region variables
     float DEFAULT_ZOOM = 13;
     Location mLastKnownLocation;
     //LatLng mDefaultLocation = new LatLng(41,41);
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
-    public static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION =1;
+    public static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     boolean mLocationPermissionGranted = false;
     MapView mMapView;
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
     FusedLocationProviderClient mFusedLocationProviderClient;
+    ProgressDialog pd;
+
+    JSONArray jsonArray = null;
+    private String respuesta = "";
+    //String pagina = "https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta.json?rows=200";
+    String pagina = "https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta.json?fl=id%2Ctitle%2Cestado%2CbicisDisponibles%2CanclajesDisponibles%2ClastUpdated&rf=html&srsname=wgs84&start=0&rows=200";
+    ArrayList<Estacion> listadoEstaciones;
+    //endregion
 
     public fMap() {
         // Required empty public constructor
@@ -64,10 +95,16 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         mMapView.getMapAsync(this);
 
 
+        //Seguramente solo devuelve 50, asíq ue hay que buscar la manera de que devuelva el resto
+        new JsonTask().execute(pagina);
 
         return v;
     }
 
+    //region Métodos mapa Google
+    /*Todos los métodos necesarios para mostrar el mapa con la localización del usuario y el botón
+    de redireccinamiento a la situación actual.
+     */
 
     public void onMapReady(GoogleMap map) {
         mMap = map;
@@ -96,7 +133,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                 mLastKnownLocation = null;
                 getLocationPermission();
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
@@ -109,7 +146,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         try {
             if (mLocationPermissionGranted) {
                 Task locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener( getActivity(), new OnCompleteListener() {
+                locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
@@ -127,7 +164,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                     }
                 });
             }
-        } catch(SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
@@ -146,11 +183,10 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 //            ActivityCompat.requestPermissions(getActivity(),
 ////                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
 ////                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -171,8 +207,103 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         updateLocationUI();
 
     }
+    //endregion
 
 
+
+
+    private class JsonTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pd = new ProgressDialog(getContext());
+            pd.setMessage("Please wait");
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        protected String doInBackground(String... params) {
+
+            JSONArray jArray = null;
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+
+                InputStream stream = connection.getInputStream();
+
+                if(stream!=null){
+                    //Con UTF-8 nos aseguramos que no haya problemas con los acentos.
+                    reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+                    StringBuilder sb = new StringBuilder();
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    stream.close();
+
+                    //Recibimos el json y lo pasamos a String
+                    respuesta = sb.toString();
+                    //Convertomos el strin a JsonObject, ya que viene con una cabecera con diferentes JSONARRAy
+                    JSONObject jobj = new JSONObject(respuesta);
+                    //Seleccionamos dentro del objeto de json el array que queremos, que se llama Result, en el cual vienen todas las estaciones
+                    jsonArray = new JSONArray(jobj.getJSONArray("result").toString());
+                    Log.i("log_tag", "Cadena JSon: " + jsonArray.toString());
+
+                }
+
+//                reader = new BufferedReader(new InputStreamReader(stream));
+//
+//                StringBuffer buffer = new StringBuffer();
+//                String line = "";
+//
+//                while ((line = reader.readLine()) != null) {
+//                    buffer.append(line+"\n");
+//                    Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
+//
+//                }
+//
+//                return buffer.toString();
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if (pd.isShowing()){
+                pd.dismiss();
+            }
+
+    }
 
 }
+}
+
+
+
 

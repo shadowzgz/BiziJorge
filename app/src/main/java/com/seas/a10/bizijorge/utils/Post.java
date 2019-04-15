@@ -20,6 +20,7 @@ public class Post {
     private InputStream is = null;
     private String respuesta = "";
 
+
     /*Crea la url de la peticón*/
     private String getEncodedData(Map<String,String> data) {
         // URL: Constante Config.URL
@@ -100,14 +101,32 @@ public class Post {
     /*Método para realizar solicitudes get*/
     private void conectaGet(String pagina) {
         try {
-            // URL--> donde se encuentra el recurso Web
+//            // URL--> donde se encuentra el recurso Web
+//            URL url = new URL(pagina);
+//
+//            // Petición HTTP al Servidor
+//            con = (HttpURLConnection) url.openConnection();
+//            //con.connect();
+//            // Recupero un lector (corriente de datos de entrada), es decir, del Servidor hacia a mí.
+//            is= con.getInputStream();
+
             URL url = new URL(pagina);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            //connection.connect();
 
-            // Petición HTTP al Servidor
-            con = (HttpURLConnection) url.openConnection();
 
-            // Recupero un lector (corriente de datos de entrada), es decir, del Servidor hacia a mí.
-            is= con.getInputStream();
+            InputStream stream = connection.getInputStream();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+
+            StringBuffer buffer = new StringBuffer();
+            String line = "";
+
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line+"\n");
+                Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
+
+            }
 
         } catch (Exception e) {
             Log.e("log_tag", "Error in http connection " + e.toString());
@@ -154,11 +173,13 @@ public class Post {
         return 	getRespuestaPostEnJson();
 
     }
+
     public JSONArray getServerDataGet(String URL) {
         conectaGet(URL);
         return 	getRespuestaPostEnJson();
 
     }
+
 
     public void registerUser(Map<String,String> dataToSend, String URL){
         conectaPost(dataToSend, URL);

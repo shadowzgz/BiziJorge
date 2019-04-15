@@ -1,5 +1,10 @@
 package com.seas.a10.bizijorge.beans;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 //Clase de las estaciones
@@ -7,8 +12,9 @@ public class Estacion {
 
     //region  Variables
     private int id;
-    private String about;
     private String title;
+    private String about;
+
     private String estado;
     private int bicisDisponibles;
     private int anclajesDisponibles;
@@ -115,5 +121,29 @@ public class Estacion {
 
 
     //endregion
+
+//    public static ArrayList<Estacion> getArrayListFromJSon(JSONArray datos){
+//        ArrayList<Estacion> lista = null;
+//        Estacion estacion = null;
+//        try {
+//            if(datos!=null && datos.length() > 0 ){
+//                lista = new ArrayList<Estacion>();
+//            }
+//            for (int i = 0; i < datos.length(); i++) {
+//                JSONObject json_data = datos.getJSONObject(i);
+//                estacion = new Estacion();
+//                estacion.setId(json_data.getInt(ID));
+//                estacion.setEmail(json_data.getString(EMAIL));
+//                estacion.setPass(json_data.getString(PASS));
+//                estacion.setName(json_data.getString(NOMBRE));
+//                lista.add(estacion);
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return lista;
+//
+//
+//    }
 
 }
