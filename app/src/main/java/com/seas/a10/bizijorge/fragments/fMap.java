@@ -25,7 +25,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.seas.a10.bizijorge.LoginActivity;
@@ -46,13 +48,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import static android.content.ContentValues.TAG;
 
 /**
  * Fragmento que contiene el mapa en el que se muestran todas las estaciones de Bizi Zaragoza
- *
- * https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta?rf=html&srsname=wgs84&start=0&point=-0.8774209607549572%2C41.65599799116259&distance=5000
+ *http://zaragoza-sedeelectronica.github.io/rest/queries/
+ * https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta.json?fl=id%2Ctitle%2Cestado%2CbicisDisponibles%2CanclajesDisponibles%2ClastUpdated%2Cgeometry&rf=html&srsname=wgs84&start=0&rows=200&distance=5000
  */
 public class fMap extends Fragment implements OnMapReadyCallback {
 
@@ -69,10 +72,11 @@ public class fMap extends Fragment implements OnMapReadyCallback {
     FusedLocationProviderClient mFusedLocationProviderClient;
     ProgressDialog pd;
 
+    boolean dataRecieved = false;
     JSONArray jsonArray = null;
     private String respuesta = "";
     //String pagina = "https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta.json?rows=200";
-    String pagina = "https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta.json?fl=id%2Ctitle%2Cestado%2CbicisDisponibles%2CanclajesDisponibles%2ClastUpdated&rf=html&srsname=wgs84&start=0&rows=200";
+    String pagina = "https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta.json?fl=id%2Ctitle%2Cestado%2CbicisDisponibles%2CanclajesDisponibles%2ClastUpdated%2Cgeometry&rf=html&srsname=wgs84&start=0&rows=200&distance=5000";
     ArrayList<Estacion> listadoEstaciones;
     //endregion
 
@@ -86,6 +90,17 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_f_map, container, false);
+
+        //Llamamos al hilo secundario para recibir todos los datos de las estaciones. Ponemos .get
+        //para que el hilo principal se pause hasta que tengamos los datos de las estaciones, y
+        //de esta forma poder colocarlos en el mapa.
+        try {
+            new JsonTask().execute(pagina).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         mMapView = v.findViewById(R.id.mapView);
@@ -95,8 +110,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         mMapView.getMapAsync(this);
 
 
-        //Seguramente solo devuelve 50, asíq ue hay que buscar la manera de que devuelva el resto
-        new JsonTask().execute(pagina);
+
 
         return v;
     }
@@ -106,17 +120,75 @@ public class fMap extends Fragment implements OnMapReadyCallback {
     de redireccinamiento a la situación actual.
      */
 
+//    public void setGoogleMap(View v , Bundle savedInstanceState){
+//        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+//
+//        mMapView = v.findViewById(R.id.mapView);
+//        mMapView.onCreate(savedInstanceState);
+////        Cargamos el mapa en el momento.
+//        mMapView.onResume();
+//        mMapView.getMapAsync(this);
+//    }
+
     public void onMapReady(GoogleMap map) {
         mMap = map;
 
 
-        //getLocationPermission();
+        getLocationPermission();
 
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
+        setMarkers();
+    }
+
+    //Ponemos en el mapa las diferentes estaciones
+    public void setMarkers (){
+
+        try{
+            for(Estacion i : listadoEstaciones){
+
+                if(i.getEstado() != "0PN") {
+                    if(i.getBicisDisponibles() <= 0){
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                        Double.parseDouble(i.getEstacionLong())))
+                                .title(i.getTitle())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+
+
+                    }else if(i.getBicisDisponibles() <= 2){
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                        Double.parseDouble(i.getEstacionLong())))
+                                .title(i.getTitle())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                    }else{
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                        Double.parseDouble(i.getEstacionLong())))
+                                .title(i.getTitle())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    }
+
+                }else{
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                    Double.parseDouble(i.getEstacionLong())))
+                            .title(i.getTitle())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                }
+
+
+            }
+        }catch (Exception ex){
+
+        }
+
     }
 
     private void updateLocationUI() {
@@ -154,7 +226,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                             mLastKnownLocation = (Location) task.getResult();
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), 10));
+                                            mLastKnownLocation.getLongitude()), 13));
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
@@ -164,6 +236,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                     }
                 });
             }
+
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
@@ -180,9 +253,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
         } else {
-//            ActivityCompat.requestPermissions(getActivity(),
-////                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-////                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
         }
@@ -230,10 +301,10 @@ public class fMap extends Fragment implements OnMapReadyCallback {
             BufferedReader reader = null;
 
             try {
+
                 URL url = new URL(params[0]);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
-
 
                 InputStream stream = connection.getInputStream();
 
@@ -254,21 +325,10 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                     //Seleccionamos dentro del objeto de json el array que queremos, que se llama Result, en el cual vienen todas las estaciones
                     jsonArray = new JSONArray(jobj.getJSONArray("result").toString());
                     Log.i("log_tag", "Cadena JSon: " + jsonArray.toString());
+                    listadoEstaciones = Estacion.getArrayListFromJSon(jsonArray);
+
 
                 }
-
-//                reader = new BufferedReader(new InputStreamReader(stream));
-//
-//                StringBuffer buffer = new StringBuffer();
-//                String line = "";
-//
-//                while ((line = reader.readLine()) != null) {
-//                    buffer.append(line+"\n");
-//                    Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
-//
-//                }
-//
-//                return buffer.toString();
 
 
             } catch (MalformedURLException e) {

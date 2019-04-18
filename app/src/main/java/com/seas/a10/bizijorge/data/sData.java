@@ -5,6 +5,7 @@ import com.seas.a10.bizijorge.beans.Cliente;
 public class sData {
 
     private static Cliente  cliente;
+    private static boolean ubiGuaranteed;
 
 
     //region Getters y setters
