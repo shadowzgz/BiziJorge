@@ -33,6 +33,7 @@ import com.google.android.gms.tasks.Task;
 import com.seas.a10.bizijorge.LoginActivity;
 import com.seas.a10.bizijorge.R;
 import com.seas.a10.bizijorge.RegisterActivity;
+import com.seas.a10.bizijorge.adapters.CustomWindowInfoAdapter;
 import com.seas.a10.bizijorge.beans.Estacion;
 import com.seas.a10.bizijorge.utils.Post;
 import org.json.JSONArray;
@@ -112,6 +113,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 
 
 
+
         return v;
     }
 
@@ -132,6 +134,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 
     public void onMapReady(GoogleMap map) {
         mMap = map;
+        mMap.setInfoWindowAdapter(new CustomWindowInfoAdapter(getContext(), listadoEstaciones));
 
 
         getLocationPermission();
@@ -150,14 +153,18 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 
         try{
             for(Estacion i : listadoEstaciones){
+                String id;
+                id = "" + i.getId();
 
                 if(i.getEstado() != "0PN") {
                     if(i.getBicisDisponibles() <= 0){
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
-                                .title(i.getTitle())
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                                .title(id)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                                .snippet("Bicis disponibles: " + i.getBicisDisponibles())
+                        );
 
 
 
@@ -165,28 +172,39 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
-                                .title(i.getTitle())
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                                .title(id)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                                .snippet("Bicis disponibles: " + i.getBicisDisponibles())
+
+                        );
+
                     }else{
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
-                                .title(i.getTitle())
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                                .title(id)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                                .snippet("Bicis disponibles: " + i.getBicisDisponibles())
+
+                        );
                     }
 
                 }else{
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                     Double.parseDouble(i.getEstacionLong())))
-                            .title(i.getTitle())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                            .title(id)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                    .snippet("Estación fuera de servicio."));
+
                 }
 
 
             }
-        }catch (Exception ex){
 
+
+        }catch (Exception ex){
+            Log.e("Exception: %s", ex.getMessage());
         }
 
     }
