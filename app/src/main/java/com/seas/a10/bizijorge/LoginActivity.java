@@ -152,6 +152,9 @@ public class LoginActivity extends Activity {
             try {
                 if (listaClientes != null && listaClientes.size() > 0) {
                     Cliente cliente = listaClientes.get(0);
+                    if (progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
                     if (cliente.getIdUsuario() > 0) {
                         sData.setCliente(cliente);
                         Toast.makeText(LoginActivity.getInstance().getBaseContext(), "" +
@@ -161,6 +164,9 @@ public class LoginActivity extends Activity {
 
                     }
                 } else {
+                    if (progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
                     Toast.makeText(LoginActivity.getInstance().getBaseContext(), "" +
                             "Usuario incorrecto. ", Toast.LENGTH_SHORT).show();
 

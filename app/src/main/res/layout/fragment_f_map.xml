@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,5 +17,49 @@
         map:cameraTargetLng="-0.8773400"
         map:cameraZoom="13"
         />
+
+    <!--<Button-->
+        <!--android:id="@+id/button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_margin="20dp"-->
+        <!--android:text="Button" />-->
+
+    <!--<Button-->
+        <!--android:id="@+id/button2"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+
+        <!--android:layout_marginLeft="80dp"-->
+        <!--android:text="Button" />-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="10dp">
+
+
+        <ImageButton
+            android:id="@+id/btnBicis"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bike" />
+        <ImageButton
+            android:id="@+id/btnAnclajes"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:scaleType="centerCrop"
+            android:src="@drawable/flag" />
+
+    </LinearLayout>
+
 
 </FrameLayout>

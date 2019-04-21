@@ -67,6 +67,14 @@ public class MenuActivity extends AppCompatActivity
         name = (TextView)header.findViewById(R.id.tvNavMenuUsername);       ;
         email = (TextView) header.findViewById(R.id.tvNavMenuEmail);
        setClientDataOnMenu();
+       initFragmentMap();
+    }
+
+    public void initFragmentMap(){
+        fMap map = new fMap();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.main_content , map).commit();
+        setTitle("Mapa");
     }
 
     @Override
@@ -112,6 +120,7 @@ public class MenuActivity extends AppCompatActivity
             fMap map = new fMap();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_content , map).commit();
+            setTitle("Mapa");
         } else if (id == R.id.nav_gallery) {
             first first = new first();
             FragmentManager fragmentManager = getSupportFragmentManager();

@@ -2,9 +2,6 @@ package com.seas.a10.bizijorge.fragments;
 
 
 import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -16,26 +13,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.seas.a10.bizijorge.LoginActivity;
 import com.seas.a10.bizijorge.R;
-import com.seas.a10.bizijorge.RegisterActivity;
 import com.seas.a10.bizijorge.adapters.CustomWindowInfoAdapter;
 import com.seas.a10.bizijorge.beans.Estacion;
-import com.seas.a10.bizijorge.utils.Post;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +44,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import static android.content.ContentValues.TAG;
@@ -71,7 +66,8 @@ public class fMap extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
     FusedLocationProviderClient mFusedLocationProviderClient;
-    ProgressDialog pd;
+    ImageButton btnAnclajes;
+    ImageButton btnBicis;
 
     boolean dataRecieved = false;
     JSONArray jsonArray = null;
@@ -110,9 +106,19 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         mMapView.onResume();
         mMapView.getMapAsync(this);
 
+        btnAnclajes = v.findViewById(R.id.btnAnclajes);
+        btnAnclajes.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setMarkersAnclajes();
+            }
+        });
 
-
-
+        btnBicis = v.findViewById(R.id.btnBicis);
+        btnBicis.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setMarkersBicis();
+            }
+        });
 
         return v;
     }
@@ -145,12 +151,15 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
-        setMarkers();
+        setMarkersBicis();
     }
 
     //Ponemos en el mapa las diferentes estaciones
-    public void setMarkers (){
+    public void setMarkersBicis (){
+        //Borramos los marcadores que se hayan colocado para poner los nuevos
+        mMap.clear();
 
+        //Colocaremos los marcadores según sus coordenadas y pondremos un color al marcador indicando el número de bicicletas restantes.
         try{
             for(Estacion i : listadoEstaciones){
                 String id;
@@ -168,7 +177,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 
 
 
-                    }else if(i.getBicisDisponibles() <= 2){
+                    }else if(i.getBicisDisponibles() <= 4){
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
@@ -178,7 +187,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 
                         );
 
-                    }else{
+                    }else if (i.getBicisDisponibles() > 4) {
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
@@ -196,6 +205,62 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                             .title(id)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
                     .snippet("Estación fuera de servicio."));
+
+                }
+
+
+            }
+
+
+        }catch (Exception ex){
+            Log.e("Exception: %s", ex.getMessage());
+        }
+
+    }
+
+    public void setMarkersAnclajes (){
+        mMap.clear();
+        //Creamos todos los marcadores en sus correspondientes coordenadas y los coloreamos según el número de anclajes
+        try{
+            for(Estacion i : listadoEstaciones){
+                String id;
+                id = "" + i.getId();
+
+                if(i.getEstado() != "0PN") {
+                    if(i.getAnclajesDisponibles() <= 0){
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                        Double.parseDouble(i.getEstacionLong())))
+                                .title(id)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                        );
+
+
+
+                    }else if(i.getAnclajesDisponibles() <= 4){
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                        Double.parseDouble(i.getEstacionLong())))
+                                .title(id)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                        );
+
+                    }else if (i.getAnclajesDisponibles() > 4){
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                        Double.parseDouble(i.getEstacionLong())))
+                                .title(id)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        );
+                    }
+
+                }else{
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                    Double.parseDouble(i.getEstacionLong())))
+                            .title(id)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                            .snippet("Estación fuera de servicio."));
 
                 }
 
@@ -303,17 +368,14 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 
     private class JsonTask extends AsyncTask<String, String, String> {
 
+
+
         protected void onPreExecute() {
             super.onPreExecute();
-
-            pd = new ProgressDialog(getContext());
-            pd.setMessage("Please wait");
-            pd.setCancelable(false);
-            pd.show();
         }
 
         protected String doInBackground(String... params) {
-
+            //publishProgress("Creando conexión...");
             JSONArray jArray = null;
             HttpURLConnection connection = null;
             BufferedReader reader = null;
@@ -325,7 +387,6 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                 connection.connect();
 
                 InputStream stream = connection.getInputStream();
-
                 if(stream!=null){
                     //Con UTF-8 nos aseguramos que no haya problemas con los acentos.
                     reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
@@ -373,10 +434,6 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            if (pd.isShowing()){
-                pd.dismiss();
-            }
-
     }
 
 }
