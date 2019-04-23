@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.seas.a10.bizijorge.beans.Cliente;
 import com.seas.a10.bizijorge.data.sData;
+import com.seas.a10.bizijorge.fragments.ListadoEstaciones;
 import com.seas.a10.bizijorge.fragments.fMap;
 import com.seas.a10.bizijorge.fragments.first;
 
@@ -132,7 +133,9 @@ public class MenuActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_content , first).commit();
         } else if (id == R.id.nav_slideshow) {
-
+            ListadoEstaciones listadoEstaciones = new ListadoEstaciones();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.main_content, listadoEstaciones).commit();
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

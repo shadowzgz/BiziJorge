@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.seas.a10.bizijorge.R;
 import com.seas.a10.bizijorge.adapters.CustomWindowInfoAdapter;
 import com.seas.a10.bizijorge.beans.Estacion;
+import com.seas.a10.bizijorge.data.sData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,11 +102,12 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         mMapView = v.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
-//        Cargamos el mapa en el momento.
+        // Cargamos el mapa en el momento.
         mMapView.onResume();
         mMapView.getMapAsync(this);
 
@@ -133,15 +135,6 @@ public class fMap extends Fragment implements OnMapReadyCallback {
     de redireccinamiento a la situación actual.
      */
 
-//    public void setGoogleMap(View v , Bundle savedInstanceState){
-//        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-//
-//        mMapView = v.findViewById(R.id.mapView);
-//        mMapView.onCreate(savedInstanceState);
-////        Cargamos el mapa en el momento.
-//        mMapView.onResume();
-//        mMapView.getMapAsync(this);
-//    }
 
     public void onMapReady(GoogleMap map) {
         mMap = map;
@@ -160,7 +153,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         setMarkersBicis();
     }
 
-    //Ponemos en el mapa las diferentes estaciones
+    //Ponemos en el mapa las diferentes estaciones con marcadores según las bicis de cada estación
     public void setMarkersBicis (){
         //Borramos los marcadores que se hayan colocado para poner los nuevos
         mMap.clear();
@@ -235,7 +228,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         }
 
     }
-
+    //Ponemos en el mapa las diferentes estaciones con marcadores según los anclajes de cada estación
     public void setMarkersAnclajes (){
         mMap.clear();
         //Creamos todos los marcadores en sus correspondientes coordenadas y los coloreamos según el número de anclajes
@@ -383,7 +376,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 
 
 
-
+    //Hilo secundario que ejecutamos para no sobrecargar el hilo principal
     private class JsonTask extends AsyncTask<String, String, String> {
 
 
@@ -423,11 +416,8 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                     jsonArray = new JSONArray(jobj.getJSONArray("result").toString());
                     Log.i("log_tag", "Cadena JSon: " + jsonArray.toString());
                     listadoEstaciones = Estacion.getArrayListFromJSon(jsonArray);
-
-
+                    sData.setListadoEstaciones(listadoEstaciones);
                 }
-
-
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -452,9 +442,8 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+        }
     }
-
-}
 }
 
 
