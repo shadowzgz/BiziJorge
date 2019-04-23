@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -171,7 +170,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
                                 .title(id)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbicirojo))
                                 .snippet("Bicis disponibles: " + i.getBicisDisponibles())
                         );
 
@@ -182,7 +181,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
                                 .title(id)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbicinaranja))
                                 .snippet("Bicis disponibles: " + i.getBicisDisponibles())
 
                         );
@@ -192,7 +191,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
                                 .title(id)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbiciverde))
                                 .snippet("Bicis disponibles: " + i.getBicisDisponibles())
 
                         );
@@ -203,7 +202,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                             .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                     Double.parseDouble(i.getEstacionLong())))
                             .title(id)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorfueraservicio))
                     .snippet("Estación fuera de servicio."));
 
                 }
@@ -232,7 +231,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
                                 .title(id)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadoranclajerojo))
                         );
 
 
@@ -242,7 +241,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
                                 .title(id)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadoranclajenaranja))
                         );
 
                     }else if (i.getAnclajesDisponibles() > 4){
@@ -250,7 +249,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                                 .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                         Double.parseDouble(i.getEstacionLong())))
                                 .title(id)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadoranclajeverde))
                         );
                     }
 
@@ -259,7 +258,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                             .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
                                     Double.parseDouble(i.getEstacionLong())))
                             .title(id)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorfueraservicio))
                             .snippet("Estación fuera de servicio."));
 
                 }

@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,11 +71,16 @@ public class MenuActivity extends AppCompatActivity
        initFragmentMap();
     }
 
-    public void initFragmentMap(){
-        fMap map = new fMap();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.main_content , map).commit();
-        setTitle("Mapa");
+    public void initFragmentMap() {
+        try {
+            fMap map = new fMap();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.main_content, map).commit();
+            setTitle("Mapa");
+
+        } catch (Exception ex) {
+            Log.e("Exception: %s", ex.getMessage());
+        }
     }
 
     @Override
