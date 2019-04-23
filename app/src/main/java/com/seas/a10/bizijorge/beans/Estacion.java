@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 //Clase de las estaciones jsonArray --> id,title,estado,bicisDisponibles,anclajesDisponibles,lastUpdated,geometry
 public class Estacion {
@@ -155,6 +156,9 @@ public class Estacion {
     public static ArrayList<Estacion> getArrayListFromJSon(JSONArray datos){
         ArrayList<Estacion> lista = null;
         Estacion estacion = null;
+        //Creamos el formato con el que nos llegan las fechas
+        SimpleDateFormat time =  new SimpleDateFormat(
+                "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
         //extraemos del cada esatcion del json un nuevo array con las coordenadas
 
         //Array de las coordenadas, viene el tipo de dato y las coordenadas en si mismas
@@ -174,7 +178,8 @@ public class Estacion {
                 estacion.setEstado(json_data.getString(ESTADO));
                 estacion.setBicisDisponibles(json_data.getInt(BICISDISPONIBLES));
                 estacion.setAnclajesDisponibles(json_data.getInt(ANCLAJESDISPONIBLES));
-
+                //Parseamos la fecha con el formato que hemos establecido
+                estacion.setLastUpdated(time.parse(json_data.getString(LASTUPDATED)));
                 //Recogemos el array de las coordenadas de la estacion
                 coordArray = new JSONObject();
                 coordArray = json_data.getJSONObject("geometry");
@@ -189,6 +194,8 @@ public class Estacion {
         } catch (JSONException e) {
             e.printStackTrace();
 
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return lista;
     }

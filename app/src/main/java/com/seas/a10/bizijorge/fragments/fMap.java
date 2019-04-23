@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -43,6 +45,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import static android.content.ContentValues.TAG;
@@ -67,6 +70,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
     FusedLocationProviderClient mFusedLocationProviderClient;
     ImageButton btnAnclajes;
     ImageButton btnBicis;
+    TextView tvLastUpdated;
 
     boolean dataRecieved = false;
     JSONArray jsonArray = null;
@@ -119,6 +123,8 @@ public class fMap extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        tvLastUpdated = v.findViewById(R.id.tvLastUpdated);
+
         return v;
     }
 
@@ -150,6 +156,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
+        //Una vez iniciado el mapa colocamos los marcadores
         setMarkersBicis();
     }
 
@@ -157,6 +164,8 @@ public class fMap extends Fragment implements OnMapReadyCallback {
     public void setMarkersBicis (){
         //Borramos los marcadores que se hayan colocado para poner los nuevos
         mMap.clear();
+        //Recogemos la fecha de actualización del API
+        boolean actualizacionLeida = false;
 
         //Colocaremos los marcadores según sus coordenadas y pondremos un color al marcador indicando el número de bicicletas restantes.
         try{
@@ -204,6 +213,16 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                             .title(id)
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorfueraservicio))
                     .snippet("Estación fuera de servicio."));
+
+                }
+
+                if(actualizacionLeida == false){
+                    Date date = i.getLastUpdated();
+                    String dayOfTheWeek = (String) DateFormat.format("EEEE", date); // Thursday
+                    String day = (String) DateFormat.format("dd",   date);
+                    String hour = (String) DateFormat.format("HH:mm",   date);
+                    tvLastUpdated.setText("Última actualización: " + dayOfTheWeek +" " + day + " " + hour );
+                    actualizacionLeida = true;
 
                 }
 

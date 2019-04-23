@@ -50,6 +50,7 @@
             android:adjustViewBounds="false"
             android:scaleType="centerCrop"
             android:src="@drawable/bike" />
+
         <ImageButton
             android:id="@+id/btnAnclajes"
             android:layout_width="50dp"
@@ -58,6 +59,17 @@
             android:adjustViewBounds="false"
             android:scaleType="centerCrop"
             android:src="@drawable/flag" />
+
+        <TextView
+            android:id="@+id/tvLastUpdated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
 
     </LinearLayout>
 
