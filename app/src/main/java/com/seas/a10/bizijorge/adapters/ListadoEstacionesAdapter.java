@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,12 +62,14 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
     }
 
 
+
     public class ListadoEstacionesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView tituloEstacion;
         private TextView bicisEstacion;
         private TextView anclajesEstacion;
-        private ImageView iconoEstacion;
+        private ImageView iconoEstacionBicis;
+        private ImageView iconoEstacionAnclajes;
         private ImageView favEstacion;
 
         public ListadoEstacionesViewHolder(View itemView){
@@ -73,7 +77,8 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
             tituloEstacion = (TextView) itemView.findViewById(R.id.tituloEstacion);
             bicisEstacion = (TextView) itemView.findViewById(R.id.bicisEstacion);
             anclajesEstacion = (TextView) itemView.findViewById(R.id.anclajesEstacion);
-            iconoEstacion = (ImageView) itemView.findViewById(R.id.imagenEstacion);
+            iconoEstacionBicis = (ImageView) itemView.findViewById(R.id.imagenEstacionBicis);
+            iconoEstacionAnclajes = (ImageView) itemView.findViewById(R.id.imagenEstacionAnclajes);
             favEstacion = (ImageView) itemView.findViewById(R.id.imagenFav);
         }
 
@@ -83,9 +88,31 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
             bicisEstacion.setText("Bicis disponibles: " + c.getBicisDisponibles());
             anclajesEstacion.setText("Anclajes disponibles: " + c.getAnclajesDisponibles());
 
+            if(c.getBicisDisponibles() <= 0){
+                iconoEstacionBicis.setBackgroundResource(R.drawable.marcadorbicirojo);
+            }else if(c.getBicisDisponibles() <= 4){
+                iconoEstacionBicis.setBackgroundResource(R.drawable.marcadorbicinaranja);
+            }else if(c.getBicisDisponibles() >= 5){
+                iconoEstacionBicis.setBackgroundResource(R.drawable.marcadorbiciverde);
+            }else{
+                iconoEstacionBicis.setBackgroundResource(R.drawable.marcadorfueraservicio);
+            }
+
+            if(c.getAnclajesDisponibles() <= 0){
+                iconoEstacionAnclajes.setBackgroundResource(R.drawable.marcadoranclajerojo);
+            }else if(c.getAnclajesDisponibles() <= 4){
+                iconoEstacionAnclajes.setBackgroundResource(R.drawable.marcadoranclajenaranja);
+            }else if(c.getAnclajesDisponibles() >= 5){
+                iconoEstacionAnclajes.setBackgroundResource(R.drawable.marcadoranclajeverde);
+            }else{
+                iconoEstacionAnclajes.setBackgroundResource(R.drawable.marcadorfueraservicio);
+            }
+
+            favEstacion.setBackgroundResource(R.drawable.notfav);
 
 
         }
+
 
 
         @Override
