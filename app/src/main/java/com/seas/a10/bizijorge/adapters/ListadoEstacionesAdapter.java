@@ -3,6 +3,7 @@ package com.seas.a10.bizijorge.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +16,19 @@ import android.widget.Toast;
 
 import com.seas.a10.bizijorge.R;
 import com.seas.a10.bizijorge.beans.Estacion;
+import com.seas.a10.bizijorge.fragments.ListadoEstaciones;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 //Clase que muestra un listado con las diferentes estaciones
 public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEstacionesAdapter.ListadoEstacionesViewHolder>{
 
     //region variables
     private ArrayList<Estacion> lisadoEstaciones;
+    private ArrayList<Estacion> lisadoEstacionesFilter;
     private Context context;
+
     //endregion
 
     //Contructor de la clase
@@ -61,7 +66,10 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
         return lisadoEstaciones.size();
     }
 
-
+    public void filterList(ArrayList<Estacion> filterList){
+        lisadoEstaciones = filterList;
+        notifyDataSetChanged();
+    }
 
     public class ListadoEstacionesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
