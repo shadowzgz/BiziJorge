@@ -61,8 +61,8 @@ public class LoginActivity extends Activity {
                 parametros.put("Action","User.login");
                 parametros.put("USER",edtEmail.getText().toString());
                 parametros.put("PASS",edtPass.getText().toString() );
-                /*parametros.put("USER","a@svalero.com");
-                parametros.put("PASS","1234" );*/
+                parametros.put("USER","a@svalero.com");
+                parametros.put("PASS","1234" );
 
 
                 TareaSegundoPlano tarea = new TareaSegundoPlano(parametros);

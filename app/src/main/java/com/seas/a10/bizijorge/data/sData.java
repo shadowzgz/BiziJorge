@@ -2,6 +2,7 @@ package com.seas.a10.bizijorge.data;
 
 import com.seas.a10.bizijorge.beans.Cliente;
 import com.seas.a10.bizijorge.beans.Estacion;
+import com.seas.a10.bizijorge.beans.EstacionFavorita;
 
 import java.util.ArrayList;
 
@@ -10,6 +11,7 @@ public class sData {
     private static Cliente  cliente;
     private static boolean ubiGuaranteed;
     private static ArrayList<Estacion> listadoEstaciones;
+    private static ArrayList<EstacionFavorita> listadoEstacionesFavoritas;
 
 
     //region Getters y setters
@@ -28,6 +30,13 @@ public class sData {
         sData.listadoEstaciones = listadoEstaciones;
     }
 
-//endregion
+    public static ArrayList<EstacionFavorita> getListadoEstacionesFavoritas() {
+        return listadoEstacionesFavoritas;
+    }
+    public static void setListadoEstacionesFavoritas(ArrayList<EstacionFavorita> listadoEstacionesFavoritas) {
+        sData.listadoEstacionesFavoritas = listadoEstacionesFavoritas;
+    }
+
+    //endregion
 
 }
