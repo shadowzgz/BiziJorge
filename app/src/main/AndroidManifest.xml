@@ -32,10 +32,11 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" /> <!-- MenuActivity: Establecemos el activity del menú como el activity que se ejecutará primero. -->
+            android:value="@string/google_maps_key" />
+        <!-- MenuActivity: Establecemos el activity del menú como el activity que se ejecutará primero. -->
         <activity
             android:name=".MenuActivity"
-            android:label="@string/title_activity_menu"
+            android:label="Bizi Zaragoza"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>

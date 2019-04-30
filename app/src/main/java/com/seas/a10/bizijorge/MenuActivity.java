@@ -130,15 +130,15 @@ public class MenuActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.main_content , map).commit();
             setTitle("Mapa");
         } else if (id == R.id.nav_gallery) {
+            ListadoEstaciones listadoEstaciones = new ListadoEstaciones();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.main_content, listadoEstaciones).commit();
+            setTitle("Listado de estaciones");
+        } else if (id == R.id.nav_slideshow) {
             first first = new first();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_content , first).commit();
             setTitle("Estaciones favoritas");
-        } else if (id == R.id.nav_slideshow) {
-            ListadoEstaciones listadoEstaciones = new ListadoEstaciones();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_content, listadoEstaciones).commit();
-            setTitle("Listado");
         } else if (id == R.id.nav_manage) {
             fIncidencia fragmentoIncidencia = new fIncidencia();
             FragmentManager fragmentManager = getSupportFragmentManager();

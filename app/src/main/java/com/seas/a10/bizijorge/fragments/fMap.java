@@ -102,7 +102,8 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
+        //Pedimos acceso al gps del terminal
+        getLocationPermission();
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         mMapView = v.findViewById(R.id.mapView);
@@ -141,7 +142,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         mMap.setInfoWindowAdapter(new CustomWindowInfoAdapter(getContext(), listadoEstaciones));
 
 
-        getLocationPermission();
+       // getLocationPermission();
 
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
@@ -297,7 +298,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 mLastKnownLocation = null;
-                getLocationPermission();
+                //getLocationPermission();
             }
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
