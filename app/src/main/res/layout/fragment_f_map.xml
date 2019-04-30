@@ -67,7 +67,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="TextView"
-            android:textSize="10sp"
+            android:textSize="8sp"
             android:textStyle="bold" />
 
 

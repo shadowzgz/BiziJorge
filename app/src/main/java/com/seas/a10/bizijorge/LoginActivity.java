@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,7 +24,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
     private EditText edtEmail;
     private EditText edtPass;
     private Button btnLogin;
@@ -61,9 +62,10 @@ public class LoginActivity extends Activity {
                 parametros.put("Action","User.login");
                 parametros.put("USER",edtEmail.getText().toString());
                 parametros.put("PASS",edtPass.getText().toString() );
-                parametros.put("USER","a@svalero.com");
-                parametros.put("PASS","1234" );
-
+                parametros.put("USER","jgil96zgz@gmail.com");
+                parametros.put("PASS","Jorge1234" );
+//                parametros.put("USER","a@svalero.com");
+//                parametros.put("PASS","1234" );
 
                 TareaSegundoPlano tarea = new TareaSegundoPlano(parametros);
                 tarea.execute("http://jgarcia.x10host.com/Controller.php");

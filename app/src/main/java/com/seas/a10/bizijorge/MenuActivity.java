@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.seas.a10.bizijorge.beans.Cliente;
 import com.seas.a10.bizijorge.data.sData;
@@ -135,11 +136,17 @@ public class MenuActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.main_content, listadoEstaciones).commit();
             setTitle("Listado de estaciones");
         } else if (id == R.id.nav_slideshow) {
-            first first = new first();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_content , first).commit();
-            setTitle("Estaciones favoritas");
-        } else if (id == R.id.nav_manage) {
+            if(sData.getCliente() != null && sData.getListadoEstacionesFavoritas() != null) {
+                ListadoEstaciones listadoEstaciones = new ListadoEstaciones(1);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.main_content, listadoEstaciones).commit();
+                setTitle("Estaciones favoritas");
+            }else{
+                Toast.makeText(getApplicationContext(), "Debes estar registrado o tener estaciones favoritas.",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+             if (id == R.id.nav_manage) {
             fIncidencia fragmentoIncidencia = new fIncidencia();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_content, fragmentoIncidencia).commit();
@@ -165,8 +172,8 @@ public class MenuActivity extends AppCompatActivity
             name.setText(cliente.getName().toString());
             email.setText(cliente.getEmail().toString());
         } else {
-            name.setText("UNKNOWN");
-            email.setText("UNKNOWN");
+            name.setText("Usuario sin identificar");
+            email.setText("");
         }
 
 

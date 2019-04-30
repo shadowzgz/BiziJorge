@@ -21,12 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seas.a10.bizijorge.LoginActivity;
+import com.seas.a10.bizijorge.MenuActivity;
 import com.seas.a10.bizijorge.R;
 import com.seas.a10.bizijorge.RegisterActivity;
 import com.seas.a10.bizijorge.beans.Estacion;
 import com.seas.a10.bizijorge.beans.EstacionFavorita;
 import com.seas.a10.bizijorge.data.sData;
 import com.seas.a10.bizijorge.fragments.ListadoEstaciones;
+import com.seas.a10.bizijorge.fragments.fMap;
 import com.seas.a10.bizijorge.utils.Post;
 
 import org.json.JSONArray;
@@ -46,6 +48,7 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
     private int estacionSelect = 0;
     ListadoEstaciones listadoEstacionesFragmento;
     ArrayList<EstacionFavorita> listadoEstacionesFav;
+    fMap fragmentoMapa;
 
     //endregion
 
@@ -71,9 +74,12 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
     public void onBindViewHolder(@NonNull ListadoEstacionesViewHolder holder, int position) {
         final Estacion item = lisadoEstaciones.get(position);
         holder.bindEstacion(item);
+
+        //region Listener del botón de favoritos
         //Pulsamos para añadir a favoritos. En caso de ya ser favorito, se elimina de la base de datos
         //Después se actualiza la lista de estaciones favoritas con la base de datos.
         //Por último se notifica al adaptador que se han realizado cambios.
+
         holder.favEstacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,12 +89,13 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
 
                     try {
                         //Buscamos si la estacion se encuentra en el listado de estaciones favoritas
-                        for (EstacionFavorita i : sData.getListadoEstacionesFavoritas()) {
-                            if (item.getId() == i.getIdEstacion()) {
-                                esFavorito = true;
+                        if(sData.getListadoEstacionesFavoritas() != null) {
+                            for (EstacionFavorita i : sData.getListadoEstacionesFavoritas()) {
+                                if (item.getId() == i.getIdEstacion()) {
+                                    esFavorito = true;
+                                }
                             }
                         }
-
                         //En caso de no estar en el listado se guarda en la base de datos
                         if (sData.getCliente() != null && esFavorito == false) {
                             HashMap<String, String> parametros = new HashMap<String, String>();
@@ -133,9 +140,28 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
                     Toast.makeText(context, "Debe estar registrado para usar esta función...", Toast.LENGTH_SHORT).show();
                 }
 
-                //Toast.makeText(context, "Pulsación", Toast.LENGTH_SHORT).show();
+
             }
         });
+
+
+        //endregion
+
+        holder.tituloEstacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+//                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+//                fragmentoMapa = fragmentoMapa.
+//                GrouponData.setPeliculaSeleccionada(item);
+//                activity.getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragmentoPeliculaDetails).addToBackStack(null).commit();
+                ((MenuActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_content, new fMap(item.getId()))
+                        .commit();
+
+            }
+        });
+
     }
 
     @Override
@@ -196,17 +222,17 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
             //Si existe un usuario registrado, y tenemos su lista de estaciones favoritas, las
             //mostramos en el listado cambiando el icono de favorito
             favEstacion.setBackgroundResource(R.drawable.notfav);
-            if(sData.getListadoEstacionesFavoritas() != null || sData.getCliente() != null) {
-                for (EstacionFavorita i : sData.getListadoEstacionesFavoritas()) {
-                    if (i.getIdEstacion() == c.getId()) {
-                        favEstacion.setBackgroundResource(R.drawable.truefav);
+            if(sData.getListadoEstacionesFavoritas() != null && sData.getCliente() != null) {
+                if(sData.getListadoEstacionesFavoritas().size() > 0) {
+                    for (EstacionFavorita i : sData.getListadoEstacionesFavoritas()) {
+                        if (i.getIdEstacion() == c.getId()) {
+                            favEstacion.setBackgroundResource(R.drawable.truefav);
+                        }
+
                     }
-
                 }
-
             }
         }
-
         @Override
         public void onClick(View view) {
 
@@ -335,8 +361,14 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
                 Post post = new Post();
                 publishProgress(50);
                 JSONArray result = post.getServerDataPost(parametros, url_select);
-                listadoEstacionesFav = EstacionFavorita.getArrayListFromJSon(result);
-                sData.setListadoEstacionesFavoritas(listadoEstacionesFav);
+                //Si no recibe ningun dato lo podenos to do a null, si no hay errores
+                if(result != null) {
+                    listadoEstacionesFav = EstacionFavorita.getArrayListFromJSon(result);
+                    sData.setListadoEstacionesFavoritas(listadoEstacionesFav);
+                }else{
+                    listadoEstacionesFav = null;
+                    sData.setListadoEstacionesFavoritas(null);
+                }
             } catch (Exception e) {
                 Log.e("log_tag", "Error in http connection " + e.toString());
                 //messageUser = "Error al conectar con el servidor. ";

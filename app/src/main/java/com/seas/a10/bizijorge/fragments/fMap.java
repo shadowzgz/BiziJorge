@@ -2,6 +2,7 @@ package com.seas.a10.bizijorge.fragments;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -72,6 +73,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
     ImageButton btnAnclajes;
     ImageButton btnBicis;
     TextView tvLastUpdated;
+    int idEstacionListado;
 
     boolean dataRecieved = false;
     JSONArray jsonArray = null;
@@ -81,10 +83,19 @@ public class fMap extends Fragment implements OnMapReadyCallback {
     ArrayList<Estacion> listadoEstaciones;
     //endregion
 
+    //region constructores
     public fMap() {
         // Required empty public constructor
     }
 
+    //Constructor que llamamos desde el listado. Le pasamos el id de la estación para que se vea su
+    //ventana de información abierta
+
+    @SuppressLint("ValidFragment")
+    public fMap(int id){
+        this.idEstacionListado = id;
+    }
+    //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -161,7 +172,11 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         //Recogemos la fecha de actualización del API
         boolean actualizacionLeida = false;
 
-        //Colocaremos los marcadores según sus coordenadas y pondremos un color al marcador indicando el número de bicicletas restantes.
+        //Colocaremos los marcadores según sus coordenadas y pondremos un color al marcador indicando
+        // el número de bicicletas restantes.
+        //En caso de cargar el mapa desde el fragmento de listado,comprobaremos el identificador que
+        // se nos pasa. En caso de coincidir con la estación de la cual se está colocando un
+        // marcador, mostraremos su ventana de información
         try{
             for(Estacion i : listadoEstaciones){
                 String id;
@@ -169,44 +184,86 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 
                 if(i.getEstado() != "0PN") {
                     if(i.getBicisDisponibles() <= 0){
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
-                                        Double.parseDouble(i.getEstacionLong())))
-                                .title(id)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbicirojo))
-                                .snippet("Bicis disponibles: " + i.getBicisDisponibles())
-                        );
+                        if(i.getId() == idEstacionListado) {
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                            Double.parseDouble(i.getEstacionLong())))
+                                    .title(id)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbicirojo))
+                                    .snippet("Bicis disponibles: " + i.getBicisDisponibles())
+                            ).showInfoWindow();
+                        } else {
 
-
-
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                                Double.parseDouble(i.getEstacionLong())))
+                                        .title(id)
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbicirojo))
+                                        .snippet("Bicis disponibles: " + i.getBicisDisponibles())
+                                );
+                        }
                     }else if(i.getBicisDisponibles() <= 4){
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
-                                        Double.parseDouble(i.getEstacionLong())))
-                                .title(id)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbicinaranja))
-                                .snippet("Bicis disponibles: " + i.getBicisDisponibles())
 
-                        );
+                        if(i.getId() == idEstacionListado) {
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                            Double.parseDouble(i.getEstacionLong())))
+                                    .title(id)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbicinaranja))
+                                    .snippet("Bicis disponibles: " + i.getBicisDisponibles())
+
+                            ).showInfoWindow();
+                        }else{
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                            Double.parseDouble(i.getEstacionLong())))
+                                    .title(id)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbicinaranja))
+                                    .snippet("Bicis disponibles: " + i.getBicisDisponibles())
+
+                            );
+                        }
+
 
                     }else if (i.getBicisDisponibles() > 4) {
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
-                                        Double.parseDouble(i.getEstacionLong())))
-                                .title(id)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbiciverde))
-                                .snippet("Bicis disponibles: " + i.getBicisDisponibles())
 
-                        );
+                        if(i.getId() == idEstacionListado) {
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                            Double.parseDouble(i.getEstacionLong())))
+                                    .title(id)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbiciverde))
+                                    .snippet("Bicis disponibles: " + i.getBicisDisponibles())
+
+                            ).showInfoWindow();
+                        }else{
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                            Double.parseDouble(i.getEstacionLong())))
+                                    .title(id)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorbiciverde))
+                                    .snippet("Bicis disponibles: " + i.getBicisDisponibles())
+
+                            );
+                        }
                     }
 
                 }else{
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
-                                    Double.parseDouble(i.getEstacionLong())))
-                            .title(id)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorfueraservicio))
-                    .snippet("Estación fuera de servicio."));
+                    if(i.getId() == idEstacionListado) {
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                        Double.parseDouble(i.getEstacionLong())))
+                                .title(id)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorfueraservicio))
+                                .snippet("Estación fuera de servicio.")).showInfoWindow();
+                    }else{
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(i.getEstacionLat()),
+                                        Double.parseDouble(i.getEstacionLong())))
+                                .title(id)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marcadorfueraservicio))
+                                .snippet("Estación fuera de servicio."));
+                    }
 
                 }
 
@@ -221,7 +278,9 @@ public class fMap extends Fragment implements OnMapReadyCallback {
                 }
 
 
+
             }
+
 
 
         }catch (Exception ex){

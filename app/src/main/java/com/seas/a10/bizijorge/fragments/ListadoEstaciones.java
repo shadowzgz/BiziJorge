@@ -1,5 +1,6 @@
 package com.seas.a10.bizijorge.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -42,17 +43,25 @@ import java.util.concurrent.ExecutionException;
 
 public class ListadoEstaciones extends Fragment{
 
-
+    //region variables
     RecyclerView rvPelicula;
     private ListadoEstacionesAdapter adapter;
     EditText search;
     private ArrayList<EstacionFavorita> listadoEstacionesFav;
+    int favorito = 0;
+    //endregion
 
+    //region constructores
     public ListadoEstaciones() {
         // Required empty public constructor
     }
 
+    @SuppressLint("ValidFragment")
+    public ListadoEstaciones(int Favorito){
+        favorito = Favorito;
+    }
 
+    //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +69,7 @@ public class ListadoEstaciones extends Fragment{
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_listado_estaciones, container, false);
 
+        //Filtramos el texto que se introduce en el textbox de búsqueda de estaciones
         search = v.findViewById(R.id.searchEstacion);
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -91,9 +101,25 @@ public class ListadoEstaciones extends Fragment{
         rvPelicula = (RecyclerView) v.findViewById(R.id.rvListadoEstaciones);
         rvPelicula.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new ListadoEstacionesAdapter(sData.getListadoEstaciones(), getContext());
-        rvPelicula.setAdapter(adapter);
+        //Si hemos seleccionado en el menú el listado normal, pasaremos todas las estaciones.
+        //Si hemos solicitado las estaciones favoritas pasaremos solo las mismas
+        if(favorito == 1 && listadoEstacionesFav != null) {
+            ArrayList<Estacion> listadoEstacionesTodo = new ArrayList<Estacion>();
+            for(Estacion i : sData.getListadoEstaciones()){
+                for(EstacionFavorita e : listadoEstacionesFav){
+                    if(i.getId() == e.getIdEstacion()){
+                        listadoEstacionesTodo.add(i);
+                    }
+                }
 
+            }
+            adapter = new ListadoEstacionesAdapter(listadoEstacionesTodo, getContext());
+            rvPelicula.setAdapter(adapter);
+        }else{
+
+            adapter = new ListadoEstacionesAdapter(sData.getListadoEstaciones(), getContext());
+            rvPelicula.setAdapter(adapter);
+        }
         return v;
     }
 
@@ -107,7 +133,7 @@ public class ListadoEstaciones extends Fragment{
         }
     }
 
-
+    //Método que filtra las estaciones según el texto que se intruduzca en el textbox de búsca de estaciones
     private void filter(String text){
         ArrayList<Estacion> listaFiltrada = new ArrayList<Estacion>();
 
@@ -165,8 +191,10 @@ public class ListadoEstaciones extends Fragment{
                 Post post = new Post();
                 publishProgress(50);
                 JSONArray result = post.getServerDataPost(parametros, url_select);
-                listadoEstacionesFav = EstacionFavorita.getArrayListFromJSon(result);
-                sData.setListadoEstacionesFavoritas(listadoEstacionesFav);
+
+                    listadoEstacionesFav = EstacionFavorita.getArrayListFromJSon(result);
+                    sData.setListadoEstacionesFavoritas(listadoEstacionesFav);
+
             } catch (Exception e) {
                 Log.e("log_tag", "Error in http connection " + e.toString());
                 //messageUser = "Error al conectar con el servidor. ";
