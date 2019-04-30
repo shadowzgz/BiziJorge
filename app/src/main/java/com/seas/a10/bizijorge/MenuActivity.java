@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.seas.a10.bizijorge.beans.Cliente;
 import com.seas.a10.bizijorge.data.sData;
 import com.seas.a10.bizijorge.fragments.ListadoEstaciones;
+import com.seas.a10.bizijorge.fragments.fIncidencia;
 import com.seas.a10.bizijorge.fragments.fMap;
 import com.seas.a10.bizijorge.fragments.first;
 
@@ -132,12 +133,17 @@ public class MenuActivity extends AppCompatActivity
             first first = new first();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_content , first).commit();
+            setTitle("Estaciones favoritas");
         } else if (id == R.id.nav_slideshow) {
             ListadoEstaciones listadoEstaciones = new ListadoEstaciones();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.main_content, listadoEstaciones).commit();
+            setTitle("Listado");
         } else if (id == R.id.nav_manage) {
-
+            fIncidencia fragmentoIncidencia = new fIncidencia();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.main_content, fragmentoIncidencia).commit();
+            setTitle("Incidencia");
         } else if (id == R.id.nav_share) {
             Intent intentRegister = new Intent(getApplicationContext(), RegisterActivity.class);
             startActivity(intentRegister);
