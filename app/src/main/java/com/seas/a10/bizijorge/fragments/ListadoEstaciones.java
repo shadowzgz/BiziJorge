@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -47,6 +48,7 @@ public class ListadoEstaciones extends Fragment{
     RecyclerView rvPelicula;
     private ListadoEstacionesAdapter adapter;
     EditText search;
+    ImageView imageLupa;
     private ArrayList<EstacionFavorita> listadoEstacionesFav;
     int favorito = 0;
     //endregion
@@ -98,6 +100,7 @@ public class ListadoEstaciones extends Fragment{
             }
         }
 
+        imageLupa = (ImageView) v.findViewById(R.id.ivLupa);
         rvPelicula = (RecyclerView) v.findViewById(R.id.rvListadoEstaciones);
         rvPelicula.setLayoutManager(new LinearLayoutManager(getContext()));
 

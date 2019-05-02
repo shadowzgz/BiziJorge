@@ -28,6 +28,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 //Fragmento donde el usuario podrá mandar una incidencia a los administradores
 public class fIncidencia extends Fragment {
@@ -99,6 +108,53 @@ public class fIncidencia extends Fragment {
         return v;
     }
 
+
+    //final String username = "bizizaragozaapp@gmail.com";
+    //final String password = "bizizaragozaapp1234";
+    //Método que manda un correo para confirmar que se ha recibido correctamente la incidencia
+    private void sendEmail(){
+
+        final String username = "bizizaragozaapp@gmail.com";
+        final String password = "bizizaragozaapp1234";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("bizizaragozaapp@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(userEmailIncidencia.getText().toString()));
+            message.setSubject("Su incidencia se ha recibido correctamente.");
+            message.setText("Desde el equipo de Bizi Zaragoza le comunicamos que:" + "\n\n" +
+                   "Su incidencia se ha guardado correctamente en nuestra base de datos." +
+                    " Lamentamos que haya tenido problemas con la aplicación." + " \n" +
+                    "Un técnico del equipo se pondrá en contacto con usted en el menor tiempo posible" +
+                    "\n" + "Gracias por la espera y por su comprensión. Atentamente, " + "\n\n" +
+                    "Equipo de desarrollo de Bizi Zaragoza");
+
+
+            Transport.send(message);
+
+            System.out.println("Done");
+            Toast.makeText(getContext(), "Se ha enviado un email de confirmación a " + userEmailIncidencia.getText().toString() + ".", Toast.LENGTH_SHORT).show();
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
     //Hilo en segundo plano para guardar en la base de datos la incidencia
     class TareaSegundoPlano extends AsyncTask<String, Integer, Boolean> {
 
@@ -145,6 +201,8 @@ public class fIncidencia extends Fragment {
                 Post post = new Post();
                 publishProgress(50);
                 post.registerUser(parametros, url_select);
+                //Se manda el email de confirmación
+                sendEmail();
             } catch (Exception e) {
                 Log.e("log_tag", "Error in http connection " + e.toString());
                 //messageUser = "Error al conectar con el servidor. ";

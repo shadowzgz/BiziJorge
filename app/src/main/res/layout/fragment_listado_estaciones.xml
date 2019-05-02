@@ -9,14 +9,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/searchEstacion"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:hint="Buscar..."
-            android:textColor="@color/wallet_dim_foreground_holo_dark" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivLupa"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="30dp"
+
+                app:srcCompat="@drawable/icolupa"
+                tools:srcCompat="@drawable/icolupa" />
+
+            <EditText
+                android:id="@+id/searchEstacion"
+                android:layout_width="290dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Buscar..."
+                android:textColor="@color/wallet_dim_foreground_holo_dark" />
+
+        </LinearLayout>
+
 
 
         <android.support.v7.widget.RecyclerView
