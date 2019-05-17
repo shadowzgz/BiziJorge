@@ -1,0 +1,211 @@
+package com.seas.a10.bizijorge.fragments;
+
+
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.seas.a10.bizijorge.LoginActivity;
+import com.seas.a10.bizijorge.R;
+import com.seas.a10.bizijorge.RegisterActivity;
+import com.seas.a10.bizijorge.beans.Incidencia;
+import com.seas.a10.bizijorge.data.sData;
+import com.seas.a10.bizijorge.utils.Post;
+
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class fDetallesIncidencia extends Fragment {
+
+    //region Variables
+    Incidencia incidencia;
+    TextView tvDetallesAsunto;
+    TextView tvDetallesCorreo;
+    TextView tvDetallesTexto;
+    TextView tvDetallesFecha;
+    EditText etNuevoMensaje;
+    Button btnEliminarIncidencia;
+    Button btnEnviarMensaje;
+
+
+    //endregion
+
+    //region Constructores
+    public fDetallesIncidencia() {
+        // Required empty public constructor
+    }
+
+    @SuppressLint("ValidFragment")
+    public fDetallesIncidencia(Incidencia incidencia) {
+        this.incidencia = incidencia;
+    }
+
+    //endregion
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_f_detalles_incidencia, container, false);
+
+        tvDetallesAsunto = (TextView) v.findViewById(R.id.tvDetallesAsunto);
+        tvDetallesCorreo = (TextView) v.findViewById(R.id.tvDetallesCorreo);
+        tvDetallesTexto = (TextView) v.findViewById(R.id.tvDetallesTexto);
+        tvDetallesFecha = (TextView) v.findViewById(R.id.tvDetallesFecha);
+        btnEliminarIncidencia = (Button) v.findViewById(R.id.btnEliminarIncidencia);
+        btnEnviarMensaje = (Button) v.findViewById(R.id.btnDetallesMandarMensaje);
+        etNuevoMensaje = (EditText) v.findViewById(R.id.textoIncidencia);
+
+        //Si el admin está logueado se hace visible el botón
+        if(sData.getCliente().getIdUsuario() == 10){
+            btnEliminarIncidencia.setVisibility(View.VISIBLE);
+        }
+
+        tvDetallesTexto.setText("Texto: " + "\n" + incidencia.getAsuntoIncidencia());
+        tvDetallesCorreo.setText("Usuario: " + incidencia.getUserEmailIncidencia());
+        tvDetallesAsunto.setText("Asunto: " + incidencia.getTextoIncidencia());
+
+        try {
+            Date date = incidencia.getFechaIncidencia();
+            String year = (String) DateFormat.format("yyyy", date);
+            String dayOfTheWeek = (String) DateFormat.format("EEEE", date); // Thursday
+            String day = (String) DateFormat.format("dd",   date);
+            String hour = (String) DateFormat.format("HH:mm",   date);
+            tvDetallesFecha.setText("Fecha: " + hour + " " + dayOfTheWeek + " " + day + " " + year );
+        }catch (Exception ex){
+            tvDetallesFecha.setText("Fecha: No se ha encontrado la fecha...");
+        }
+
+        btnEnviarMensaje.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Date c = Calendar.getInstance().getTime();
+                    SimpleDateFormat time =  new SimpleDateFormat(
+                            "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
+                    String formattedDate = time.format(c);
+
+                    if (TextUtils.isEmpty(etNuevoMensaje.getText().toString()) == false) {
+
+                        HashMap<String, String> parametros = new HashMap<String, String>();
+                        parametros.put("Action", "Mensaje.add");
+                        parametros.put("mensajeTexto", etNuevoMensaje.getText().toString());
+                        parametros.put("mensajeFecha", formattedDate);
+                        parametros.put("mensajeEmail", sData.getCliente().getEmail());
+                        parametros.put("userId", "" + sData.getCliente().getIdUsuario());
+                        parametros.put("incidenciaId", "" + incidencia.getIdIncidencia());
+
+                        GuardarMensajeAsync tarea = new GuardarMensajeAsync(parametros);
+                        tarea.execute("http://jgarcia.x10host.com/Controller.php");
+                    } else {
+                        Toast.makeText(getContext(), "Tienes que escribir algo en el mensaje.", Toast.LENGTH_SHORT).show();
+                    }
+                }catch(Exception ex){
+
+                }
+            }
+        });
+
+        return v;
+    }
+
+
+
+    //Hilo en segundo plano para realiza    r las llamadas a la base de datos
+    class GuardarMensajeAsync extends AsyncTask<String, Integer, Boolean> {
+
+        private ProgressDialog progressDialog = new ProgressDialog(getContext());
+        private HashMap<String, String> parametros = null;
+
+
+        public GuardarMensajeAsync(HashMap<String, String> parametros) {
+            this.parametros = parametros;
+        }
+
+        /*
+         * onPreExecute().
+         *  Se ejecutará antes del código principal de nuestra tarea.
+         * Se suele utilizar para preparar la ejecución de la tarea, inicializar la interfaz, etc.
+         * */
+        @Override
+        protected void onPreExecute() {
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMessage("Procesando...");
+            progressDialog.setCancelable(true);
+            progressDialog.setMax(100);
+            progressDialog.setProgress(0);
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface arg0) {
+                    GuardarMensajeAsync.this.cancel(true);
+                }
+            });
+
+
+        }
+
+        /*
+         * doInBackground().
+         * Contendrá el código principal de nuestra tarea.
+         * */
+        @Override
+        protected Boolean doInBackground(String... params) {
+            String url_select = params[0];
+            publishProgress(0);
+            try {
+                Post post = new Post();
+                publishProgress(50);
+                post.registerUser(parametros, url_select);
+            } catch (Exception e) {
+                Log.e("log_tag", "Error in http connection " + e.toString());
+                //messageUser = "Error al conectar con el servidor. ";
+            }
+            publishProgress(100);
+            return true;
+        }
+
+        /* Acualizamos el progreso de la aplicación*/
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            int progreso = values[0].intValue();
+            progressDialog.setProgress(progreso);
+        }
+
+        /*
+         * onPostExecute().
+         * Se ejecutará cuando finalice nuestra tarea, o dicho de otra forma,
+         * tras la finalización del método doInBackground().
+         * */
+        @Override
+        protected void onPostExecute(Boolean resp) {
+            Toast.makeText(getContext(), "Mensaje enviado satisfactoriamente", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+
+
+}

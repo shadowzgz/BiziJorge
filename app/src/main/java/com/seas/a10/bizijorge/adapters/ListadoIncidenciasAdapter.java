@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.seas.a10.bizijorge.MenuActivity;
 import com.seas.a10.bizijorge.R;
 import com.seas.a10.bizijorge.beans.Incidencia;
+import com.seas.a10.bizijorge.fragments.fDetallesIncidencia;
+import com.seas.a10.bizijorge.fragments.fMap;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +51,16 @@ public class ListadoIncidenciasAdapter extends RecyclerView.Adapter <ListadoInci
     public void onBindViewHolder(@NonNull ListadoIncidenciasViewHolder holder, int position) {
         final Incidencia item = listadoIncidencias.get(position);
         holder.bindIncidencia(item);
+
+        holder.asuntoIncidencia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MenuActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_content, new fDetallesIncidencia(item))
+                        .commit();
+            }
+        });
+
     }
 
     @Override
@@ -83,7 +96,7 @@ public class ListadoIncidenciasAdapter extends RecyclerView.Adapter <ListadoInci
                 String hour = (String) DateFormat.format("HH:mm",   date);
 
                 asuntoIncidencia.setText(c.getAsuntoIncidencia());
-                fechaIncidencia.setText(dayOfTheWeek + " " + hour + " " + day + " " + year );
+                fechaIncidencia.setText( hour + " " + dayOfTheWeek + " " + day + " " + year );
                 emailIncidencia.setText(c.getUserEmailIncidencia());
                 idIncidencia.setText("ID: "+ c.getIdIncidencia());
             }catch (Exception ex){

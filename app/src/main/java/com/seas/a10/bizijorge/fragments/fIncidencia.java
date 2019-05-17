@@ -21,15 +21,20 @@ import android.widget.Toast;
 import com.seas.a10.bizijorge.LoginActivity;
 import com.seas.a10.bizijorge.R;
 import com.seas.a10.bizijorge.RegisterActivity;
+import com.seas.a10.bizijorge.beans.Incidencia;
 import com.seas.a10.bizijorge.data.sData;
 import com.seas.a10.bizijorge.utils.Post;
 
+import org.json.JSONArray;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -41,12 +46,14 @@ import javax.mail.internet.MimeMessage;
 
 //Fragmento donde el usuario podrá mandar una incidencia a los administradores
 public class fIncidencia extends Fragment {
+    //region variables
     private EditText userEmailIncidencia;
     private EditText asuntoIncidencia;
     private EditText textoIncidencia;
     private Button btnSendIncidencia;
     private TextView tvListadoIncidencias;
-
+    private ArrayList<Incidencia> listadoIncidencias;
+    //endregion
 
 
 
@@ -64,11 +71,23 @@ public class fIncidencia extends Fragment {
         tvListadoIncidencias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ListadoIncidencias frag = new ListadoIncidencias();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.main_content, frag)
-                        .addToBackStack(null)
-                        .commit();
+
+                try {
+                    recogerIncidencias();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(sData.getCliente() != null && listadoIncidencias.size() > 0){
+                    ListadoIncidencias frag = new ListadoIncidencias(listadoIncidencias);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_content, frag)
+                            .addToBackStack(null)
+                            .commit();
+                }else{
+                    Toast.makeText(getContext(), "Debe estar registrado o tener alguna incidencia.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -167,6 +186,28 @@ public class fIncidencia extends Fragment {
 
     }
 
+    //Método que llama a la base de datos para recoger incidencias
+    public void recogerIncidencias() throws ExecutionException, InterruptedException {
+        //Si está logueado el admin se traen todas las incidencias, si no solo se traen las del usuario logueado
+        if(sData.getCliente() != null) {
+            if (sData.getCliente().getIdUsuario() == 10) {
+                HashMap<String, String> parametros = new HashMap<String, String>();
+                parametros.put("Action", "Incidencia.select");
+                parametros.put("ID_USUARIO", "" + sData.getCliente().getIdUsuario());
+                TareaSegundoPlanoSelectIncidencias tarea = new TareaSegundoPlanoSelectIncidencias(parametros);
+                tarea.execute("http://jgarcia.x10host.com/Controller.php").get();
+            } else {
+                HashMap<String, String> parametros = new HashMap<String, String>();
+                parametros.put("Action", "Incidencia.selectuser");
+                parametros.put("ID_USUARIO", "" + sData.getCliente().getIdUsuario());
+                TareaSegundoPlanoSelectIncidencias tarea = new TareaSegundoPlanoSelectIncidencias(parametros);
+                tarea.execute("http://jgarcia.x10host.com/Controller.php").get();
+            }
+        }else {
+            Toast.makeText(getContext(), "Debe estar registrado para usar esta funcionalidad.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     //Hilo en segundo plano para guardar en la base de datos la incidencia
     class TareaSegundoPlano extends AsyncTask<String, Integer, Boolean> {
@@ -243,6 +284,88 @@ public class fIncidencia extends Fragment {
             }
             Toast.makeText(getContext(), "Incidencia guardada satisfactoriamente.", Toast.LENGTH_SHORT).show();
             Toast.makeText(getContext(), "Le llegará un correo de confirmación", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    class TareaSegundoPlanoSelectIncidencias extends AsyncTask<String, Integer, Boolean> {
+
+        private ProgressDialog progressDialog = new ProgressDialog(getContext());
+        private HashMap<String, String> parametros = null;
+
+
+        public TareaSegundoPlanoSelectIncidencias(HashMap<String, String> parametros) {
+            this.parametros = parametros;
+        }
+
+        /*
+         * onPreExecute().
+         *  Se ejecutará antes del código principal de nuestra tarea.
+         * Se suele utilizar para preparar la ejecución de la tarea, inicializar la interfaz, etc.
+         * */
+        @Override
+        protected void onPreExecute() {
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMessage("Procesando...");
+            progressDialog.setCancelable(true);
+            progressDialog.setMax(100);
+            progressDialog.setProgress(0);
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface arg0) {
+                    fIncidencia.TareaSegundoPlanoSelectIncidencias.this.cancel(true);
+                }
+            });
+
+
+        }
+
+        /*
+         * doInBackground().
+         * Contendrá el código principal de nuestra tarea.
+         * */
+        @Override
+        protected Boolean doInBackground(String... params) {
+            String url_select = params[0];
+            publishProgress(0);
+            try {
+                Post post = new Post();
+                publishProgress(50);
+                JSONArray result = post.getServerDataPost(parametros, url_select);
+                if(result != null) {
+                    listadoIncidencias = Incidencia.getArrayListFromJSon(result);
+                    sData.setListadoIncidencias(listadoIncidencias);
+                }else{
+                    listadoIncidencias = null;
+                    sData.setListadoIncidencias(null);
+                }
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error in http connection " + e.toString());
+                //messageUser = "Error al conectar con el servidor. ";
+            }
+            publishProgress(100);
+            return true;
+        }
+
+        /* Acualizamos el progreso de la aplicación*/
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            int progreso = values[0].intValue();
+            progressDialog.setProgress(progreso);
+        }
+
+        /*
+         * onPostExecute().
+         * Se ejecutará cuando finalice nuestra tarea, o dicho de otra forma,
+         * tras la finalización del método doInBackground().
+         * */
+        @Override
+        protected void onPostExecute(Boolean resp) {
+            //Toast.makeText(RegisterActivity.getInstance().getBaseContext(), "Registro realizado satisfactoriamente", Toast.LENGTH_SHORT).show();
+            if (progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
         }
     }
 
