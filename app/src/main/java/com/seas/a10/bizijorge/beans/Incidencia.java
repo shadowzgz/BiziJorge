@@ -1,6 +1,14 @@
 package com.seas.a10.bizijorge.beans;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 //Entidad de incidencias
 public class Incidencia {
@@ -12,6 +20,14 @@ public class Incidencia {
     private int idUsuario;
     private Date fechaIncidencia;
     private String userEmailIncidencia;
+
+    private final static String IDINCIDENCIA = "IncidenciaId";
+    private final static String ASUNTOINCIDENCIA = "IncidenciaAsunto";
+    private final static String TEXTOINCIDENCIA = "IncidenciaTexto";
+    private final static String IDUSUARIO = "ID_USUARIO";
+    private final static String FECHAINCIDENCIA = "IncidenciaFecha";
+    private final static String USEREMAILINCIDENCIA = "IncidenciaUserEmail";
+
 
     //endregion
 
@@ -79,6 +95,43 @@ public class Incidencia {
     }
 
     //endregion
+
+    /*Recibe un JSON y lo transforma a la entidad deseada*/
+    public static ArrayList<Incidencia> getArrayListFromJSon(JSONArray datos){
+        ArrayList<Incidencia> lista = null;
+
+        //Creamos el formato con el que nos llegan las fechas
+        SimpleDateFormat time =  new SimpleDateFormat(
+                "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
+        Incidencia incidencia = null;
+        try {
+            if(datos!=null && datos.length() > 0 ){
+                lista = new ArrayList<Incidencia>();
+            }
+            for (int i = 0; i < datos.length(); i++) {
+                JSONObject json_data = datos.getJSONObject(i);
+                incidencia = new Incidencia();
+                incidencia.setIdIncidencia(json_data.getInt(IDINCIDENCIA));
+                incidencia.setAsuntoIncidencia(json_data.getString(ASUNTOINCIDENCIA));
+                incidencia.setTextoIncidencia(json_data.getString(TEXTOINCIDENCIA));
+                incidencia.setIdUsuario(json_data.getInt(IDUSUARIO));
+                try{
+                    incidencia.setFechaIncidencia(time.parse(json_data.getString(FECHAINCIDENCIA)));
+                }catch (Exception ex){
+                 incidencia.setFechaIncidencia(null);
+                }
+                //incidencia.setFechaIncidencia(time.parse(json_data.getString(FECHAINCIDENCIA)));
+                incidencia.setUserEmailIncidencia(json_data.getString(USEREMAILINCIDENCIA));
+
+
+                lista.add(incidencia);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return lista;
+
+    }
 
 
 }

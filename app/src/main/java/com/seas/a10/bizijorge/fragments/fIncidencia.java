@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seas.a10.bizijorge.LoginActivity;
@@ -44,6 +45,7 @@ public class fIncidencia extends Fragment {
     private EditText asuntoIncidencia;
     private EditText textoIncidencia;
     private Button btnSendIncidencia;
+    private TextView tvListadoIncidencias;
 
 
 
@@ -57,8 +59,19 @@ public class fIncidencia extends Fragment {
         asuntoIncidencia = (EditText) v.findViewById(R.id.asuntoIncidencia);
         textoIncidencia = (EditText) v.findViewById(R.id.textoIncidencia);
         btnSendIncidencia = (Button) v.findViewById(R.id.btn_sendIncidencia);
+        tvListadoIncidencias = (TextView) v.findViewById(R.id.tvListadoIncidencias);
 
-//
+        tvListadoIncidencias.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ListadoIncidencias frag = new ListadoIncidencias();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_content, frag)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
         btnSendIncidencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

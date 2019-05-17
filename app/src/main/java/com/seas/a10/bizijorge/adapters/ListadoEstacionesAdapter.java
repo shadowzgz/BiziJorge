@@ -59,7 +59,7 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
 
     }
 
-
+    //Instanciamos el ViewHolder y le intactamos la vista de las estaciones
     @NonNull
     @Override
     public ListadoEstacionesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -174,6 +174,7 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
         notifyDataSetChanged();
     }
 
+    //Clase ViewHolder del adaptador de listado de estaciones
     public class ListadoEstacionesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView tituloEstacion;
