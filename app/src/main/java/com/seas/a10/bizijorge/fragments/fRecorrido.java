@@ -10,8 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.seas.a10.bizijorge.R;
+
+import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,10 +25,17 @@ public class fRecorrido extends Fragment {
 
     //region Variables
     private Button btnStop;
+    private Button btnEnd;
+    private Button btnReset;
     private Chronometer crono  ;
     int isStoped = 0;
     int ini = 0;
     private long lastPause;
+
+    TextView tvRecorridoTiempo;
+    TextView tvRecorridoDistancia;
+    TextView tvRecorridoContaminacion;
+    TextView tvRecorridoCalorias;
     //endregion
 
     public fRecorrido() {
@@ -38,8 +50,15 @@ public class fRecorrido extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_f_recorrido, container, false);
 
         btnStop = (Button) v.findViewById(R.id.btnStop);
+        btnEnd = (Button) v.findViewById(R.id.btnEnd);
+        btnReset = (Button) v.findViewById(R.id.btnReset);
         crono   = (Chronometer) v.findViewById(R.id.simpleChronometer);
+        tvRecorridoTiempo = (TextView) v.findViewById(R.id.tvRecorridoTiempo);
+        tvRecorridoDistancia = (TextView) v.findViewById(R.id.tvRecorridoDistancia);
+        tvRecorridoContaminacion = (TextView) v.findViewById(R.id.tvRecorridoContaminacion);
+        tvRecorridoCalorias = (TextView) v.findViewById(R.id.tvRecorridoCal);
 
+        //Con este método configuramos el cronómetro añadiendo las horas
         crono.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener(){
             @Override
             public void onChronometerTick(Chronometer cArg) {
@@ -78,6 +97,64 @@ public class fRecorrido extends Fragment {
                     }
                 }
 
+            }
+        });
+
+        //Reiniciamos el cronómetro dejando todos los valores por defecto
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                crono.setBase(SystemClock.elapsedRealtime());
+                ini = 0;
+                isStoped = 0;
+                crono.stop();
+            }
+        });
+
+
+        btnEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lastPause = SystemClock.elapsedRealtime();
+                crono.stop();
+                isStoped = 1;
+
+                try {
+
+
+                    long millis = SystemClock.elapsedRealtime() - crono.getBase();
+                    long hours = TimeUnit.MILLISECONDS.toHours(millis);
+                    millis -= TimeUnit.HOURS.toMillis(hours);
+                    long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+                    millis -= TimeUnit.MINUTES.toMillis(minutes);
+                    long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+                    StringBuilder sb = new StringBuilder(64);
+                    sb.append(hours);
+                    sb.append(" Horas ");
+                    sb.append(minutes);
+                    sb.append(" Minutos ");
+                    sb.append(seconds);
+                    sb.append(" Segundos");
+                    tvRecorridoTiempo.setText("Tiempo de recorrido: " + sb);
+
+
+                    double dis = ((((double)millis / 1000.0)* 12.0)/ 3600.0)*1000.0;
+                    //Teniendo en cuenta como velocidad media 12km/h
+                    tvRecorridoDistancia.setText("Distancia recorrida: " + (int)dis + " metros");
+
+                    //A partir de que un coche consume 17kg de co2 cada 100km --> 100m / 17g
+                    int co = ((int)dis *17)/100;
+                    tvRecorridoContaminacion.setText("CO2 no emitido: " + co + " gramos");
+
+                    //Teniendo en cuenta que una persona de 65 kg gasta de media 6,4 calorías al minuto
+                    double cal = (((double)millis/1000)*64)/1000;
+                    tvRecorridoCalorias.setText("Calorías consumidas: " + new DecimalFormat("##.##").format(cal) + " calorías");
+
+
+
+                }catch (Exception ex){
+                    Toast.makeText(getContext(), "Error al guardar los datos del recorrido.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
