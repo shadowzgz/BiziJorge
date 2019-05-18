@@ -4,6 +4,7 @@ import com.seas.a10.bizijorge.beans.Cliente;
 import com.seas.a10.bizijorge.beans.Estacion;
 import com.seas.a10.bizijorge.beans.EstacionFavorita;
 import com.seas.a10.bizijorge.beans.Incidencia;
+import com.seas.a10.bizijorge.beans.Mensaje;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,8 @@ public class sData {
     private static ArrayList<Estacion> listadoEstaciones;
     private static ArrayList<EstacionFavorita> listadoEstacionesFavoritas;
     private static ArrayList<Incidencia> listadoIncidencias;
-
+    private static ArrayList<Mensaje>   listadoMensajes;
+    private static Incidencia incidenciaDetalles;
 
     //region Getters y setters
 
@@ -44,6 +46,20 @@ public class sData {
     }
     public static void setListadoIncidencias(ArrayList<Incidencia> listadoIncidencias) {
         sData.listadoIncidencias = listadoIncidencias;
+    }
+
+    public static ArrayList<Mensaje> getListadoMensajes() {
+        return listadoMensajes;
+    }
+    public static void setListadoMensajes(ArrayList<Mensaje> listadoMensajes) {
+        sData.listadoMensajes = listadoMensajes;
+    }
+
+    public static Incidencia getIncidenciaDetalles() {
+        return incidenciaDetalles;
+    }
+    public static void setIncidenciaDetalles(Incidencia incidenciaDetalles) {
+        sData.incidenciaDetalles = incidenciaDetalles;
     }
 
     //endregion

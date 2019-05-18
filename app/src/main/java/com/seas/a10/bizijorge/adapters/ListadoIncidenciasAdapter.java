@@ -3,6 +3,7 @@ package com.seas.a10.bizijorge.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,14 @@ import android.widget.TextView;
 import com.seas.a10.bizijorge.MenuActivity;
 import com.seas.a10.bizijorge.R;
 import com.seas.a10.bizijorge.beans.Incidencia;
+import com.seas.a10.bizijorge.data.sData;
 import com.seas.a10.bizijorge.fragments.fDetallesIncidencia;
 import com.seas.a10.bizijorge.fragments.fMap;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import static android.content.ContentValues.TAG;
 
 public class ListadoIncidenciasAdapter extends RecyclerView.Adapter <ListadoIncidenciasAdapter.ListadoIncidenciasViewHolder> {
 
@@ -24,6 +28,7 @@ public class ListadoIncidenciasAdapter extends RecyclerView.Adapter <ListadoInci
 
 
     //endregion
+
     //region Constructores
     public ListadoIncidenciasAdapter(ArrayList<Incidencia> listadoIncidencias) {
 
@@ -32,7 +37,7 @@ public class ListadoIncidenciasAdapter extends RecyclerView.Adapter <ListadoInci
     public ListadoIncidenciasAdapter(){
 
     }
-
+    //endregion
 
     //Instanciamos ViewHolder y le inyectamos la vista de las incidencias
     @NonNull
@@ -55,6 +60,8 @@ public class ListadoIncidenciasAdapter extends RecyclerView.Adapter <ListadoInci
         holder.asuntoIncidencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sData.setIncidenciaDetalles(item);
+
                 ((MenuActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_content, new fDetallesIncidencia(item))
                         .commit();
@@ -67,7 +74,7 @@ public class ListadoIncidenciasAdapter extends RecyclerView.Adapter <ListadoInci
     public int getItemCount() {
         return listadoIncidencias.size();
     }
-    //endregion
+
 
     //Clase ViewHolder del adaptador de listado de incidencias
     public class ListadoIncidenciasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -102,7 +109,7 @@ public class ListadoIncidenciasAdapter extends RecyclerView.Adapter <ListadoInci
             }catch (Exception ex){
 
             }
-
+            Log.d(TAG, "Error al bindear los datos de la incidencia");
         }
 
 

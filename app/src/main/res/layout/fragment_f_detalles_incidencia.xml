@@ -5,97 +5,115 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".fragments.fDetallesIncidencia">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btnEliminarIncidencia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Eliminar"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/tvDetallesAsunto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Asunto:"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvDetallesCorreo"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_height="wrap_content"
-            android:text="Correo:" />
-
-        <TextView
-            android:id="@+id/tvDetallesFecha"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_height="wrap_content"
-            android:text="Fecha:" />
-
-
-        <TextView
-            android:id="@+id/tvDetallesTexto"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="10dp"
-                        android:layout_height="wrap_content"
-            android:text="Texto:"
-            android:layout_marginBottom="20dp"/>
-    </LinearLayout>
-    
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvListadoMensajes"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"/>
-    </LinearLayout>
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:id="@+id/tvDetallesNuevoMensaje"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Añadir nuevo mensaje:"
-            android:layout_marginLeft="10dp"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/textoIncidencia"
-            android:layout_width="match_parent"
-            android:layout_marginTop="24dp"
-            android:layout_height="198dp"
-            android:hint="Detalle su problema..."
-            android:scrollbars="vertical"
-            android:inputType="textMultiLine"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnDetallesMandarMensaje"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Enviar mensaje" />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/btnEliminarIncidencia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Eliminar"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/tvDetallesAsunto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Asunto:"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDetallesCorreo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Correo:" />
+
+                <TextView
+                    android:id="@+id/tvDetallesFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Fecha:" />
 
 
+                <TextView
+                    android:id="@+id/tvDetallesTexto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Texto:" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/wallet_dim_foreground_holo_dark"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDetallesNuevoMensaje"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="Mensajes:"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvListadoMensajes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:scrollbars="vertical" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <EditText
+                    android:id="@+id/textoIncidencia"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="198dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginRight="20dp"
+                    android:hint="Detalle su problema..."
+                    android:inputType="textMultiLine"
+                    android:scrollbars="vertical"
+                    android:singleLine="false" />
+
+                <Button
+                    android:id="@+id/btnDetallesMandarMensaje"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Enviar mensaje"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="40dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
