@@ -26,6 +26,7 @@ import com.seas.a10.bizijorge.data.sData;
 import com.seas.a10.bizijorge.fragments.ListadoEstaciones;
 import com.seas.a10.bizijorge.fragments.fIncidencia;
 import com.seas.a10.bizijorge.fragments.fMap;
+import com.seas.a10.bizijorge.fragments.fRecorrido;
 import com.seas.a10.bizijorge.fragments.first;
 
 
@@ -163,7 +164,12 @@ public class MenuActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
             Intent intentRegister = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intentRegister);
-        }
+        } else if (id == R.id.nav_chrono) {
+                 fRecorrido reco = new fRecorrido();
+                 FragmentManager fragmentManager = getSupportFragmentManager();
+                 fragmentManager.beginTransaction().replace(R.id.main_content , reco).commit();
+                 setTitle("Recorrido");
+             }
 
 
 

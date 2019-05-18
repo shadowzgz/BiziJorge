@@ -250,7 +250,9 @@ public class fDetallesIncidencia extends Fragment {
         @Override
         protected void onPostExecute(Boolean resp) {
            // Toast.makeText(getContext(), "Mensaje enviado satisfactoriamente", Toast.LENGTH_SHORT).show();
-
+            if (progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
         }
     }
 
