@@ -59,8 +59,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/cardview_shadow_start_color"
                 android:orientation="vertical"
-                android:layout_marginTop="20dp">
+                android:layout_margin="10dp">
 
 
                 <TextView
@@ -76,23 +78,23 @@
                     android:id="@+id/tvRecorridoTiempo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tiempo de recorrido:"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp"
+                    android:text="Tiempo de recorrido:" />
 
                 <TextView
                     android:id="@+id/tvRecorridoDistancia"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Distancia recorrida:"
-                    android:layout_marginLeft="20dp"/>
+                    android:layout_marginLeft="20dp"
+                    android:text="Distancia recorrida:" />
 
                 <TextView
-                android:id="@+id/tvRecorridoContaminacion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="CO2:"
-                android:layout_marginLeft="20dp"/>
+                    android:id="@+id/tvRecorridoContaminacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="CO2:" />
 
                 <TextView
                     android:id="@+id/tvRecorridoCal"
@@ -100,6 +102,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:text="Cal consumidas:" />
+
+                <Button
+                    android:id="@+id/btnGuardarRecorrido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:text="Guardar recorrido" />
 
 
             </LinearLayout>

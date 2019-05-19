@@ -35,6 +35,7 @@ import com.seas.a10.bizijorge.utils.Post;
 import org.json.JSONArray;
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,6 +59,7 @@ public class fDetallesIncidencia extends Fragment {
     EditText etNuevoMensaje;
     Button btnEliminarIncidencia;
     Button btnEnviarMensaje;
+
     RecyclerView rvMensajes;
 
     ListadoMensajesAdapter adapter;
@@ -147,6 +149,39 @@ public class fDetallesIncidencia extends Fragment {
 
                 }catch (Exception ex){
                     Log.d(TAG, "onClick: Error al tratar de actualizar el fragmento.");
+                }
+            }
+        });
+
+
+        btnEliminarIncidencia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    HashMap<String, String> parametros = new HashMap<String, String>();
+                    parametros.put("Action", "Incidencia.delete");
+                    parametros.put("IncidenciaId", "" + incidencia.getIdIncidencia());
+
+                    GuardarMensajeAsync tarea = new GuardarMensajeAsync(parametros);
+                    tarea.execute("http://jgarcia.x10host.com/Controller.php");
+
+                    //Creamos una nueva lista de incidencias donde eliminamos la que el usuario quiere quitar
+                    ArrayList<Incidencia> lista = new ArrayList<Incidencia>();
+                    for(Incidencia i : sData.getListadoIncidencias()){
+                        if(i.getIdIncidencia() != incidencia.getIdIncidencia()){
+                            lista.add(i);
+                        }
+                    }
+
+                    //Establecemos la nueva lista con la incidencia eliminada en la clase estática
+                    sData.setListadoIncidencias(lista);
+
+
+                    ((MenuActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_content, new ListadoIncidencias(sData.getListadoIncidencias()))
+                            .commit();
+                }catch (Exception ex){
+                    Toast.makeText(getContext(), "Error al eliminar la incidencia.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
