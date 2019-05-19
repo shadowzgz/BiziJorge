@@ -127,7 +127,7 @@ public class Recorrido {
                 }
 
                 recorrido.setRecorridoCo2(json_data.getDouble(RECORRIDOCO2));
-
+                recorrido.setRecorridoCalorias(json_data.getDouble(RECORRIDOCALORIAS));
 
                 lista.add(recorrido);
             }

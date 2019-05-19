@@ -50,6 +50,7 @@ public class fRecorrido extends Fragment {
     private Button btnStop;
     private Button btnEnd;
     private Button btnReset;
+    private Button btnSumatorio;
     ListadoRecorridosAdapter adapter;
     Button btnGuardarRecorrido;
     private Chronometer crono  ;
@@ -89,6 +90,7 @@ public class fRecorrido extends Fragment {
         tvRecorridoDistancia = (TextView) v.findViewById(R.id.tvRecorridoDistancia);
         tvRecorridoContaminacion = (TextView) v.findViewById(R.id.tvRecorridoContaminacion);
         tvRecorridoCalorias = (TextView) v.findViewById(R.id.tvRecorridoCal);
+        btnSumatorio = (Button) v.findViewById(R.id.btnSumatorioRecorridos);
         btnGuardarRecorrido.setVisibility(View.INVISIBLE);
 
         getRecorridos();
@@ -251,11 +253,57 @@ public class fRecorrido extends Fragment {
             }
         });
         //endregion
+
+        //region Botón sumatorio
+        btnSumatorio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double distancia = 0;
+                double co2 = 0;
+                double cal = 0;
+                long tiempo = 0;
+                if(listadoRecorridos.size() > 0) {
+                    for (Recorrido i : listadoRecorridos) {
+                        distancia = distancia + i.getRecorridoDistancia();
+                        co2 = co2 + i.getRecorridoCo2();
+                        cal = cal + i.getRecorridoCalorias();
+                        tiempo = tiempo + i.getRecorridoTiempo();
+                    }
+
+                    long hours = TimeUnit.MILLISECONDS.toHours(tiempo);
+                    tiempo -= TimeUnit.HOURS.toMillis(hours);
+                    long minutes = TimeUnit.MILLISECONDS.toMinutes(tiempo);
+                    tiempo -= TimeUnit.MINUTES.toMillis(minutes);
+                    long seconds = TimeUnit.MILLISECONDS.toSeconds(tiempo);
+                    StringBuilder sb = new StringBuilder(64);
+                    sb.append(hours);
+                    sb.append(" Horas ");
+                    sb.append(minutes);
+                    sb.append(" Minutos ");
+                    sb.append(seconds);
+                    sb.append(" Segundos");
+
+                    Toast.makeText(getContext(), "Tiempo total: " + sb + "\n" +
+                            "Distancia total: " + (int)distancia + " metros" + "\n" +
+                            "Co2 no emitido total: " + co2 + " gramos" + "\n" +
+                            "Calorías consumidas totales: " + new DecimalFormat("##.##").format(cal) + " calorías" , Toast.LENGTH_LONG).show();
+
+
+                }else {
+                    Toast.makeText(getContext(), "No tienes recorridos...", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+        //endregion
+
+        //Si tenemos algún recorrido en la lista, instanciamos el RecyclerView
         if(listadoRecorridos.size() > 0) {
             rvListadoRecorridos.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new ListadoRecorridosAdapter(listadoRecorridos);
             rvListadoRecorridos.setAdapter(adapter);
         }
+
         return v;
     }
 
@@ -274,7 +322,7 @@ public class fRecorrido extends Fragment {
 
     }
 
-    //Hilo en segundo plano para guardar en la base de datos la incidencia
+    //Hilo en segundo plano para guardar en la base de datos del recorrido
     class TareaSegundoPlano extends AsyncTask<String, Integer, Boolean> {
 
         private ProgressDialog progressDialog = new ProgressDialog(getContext());

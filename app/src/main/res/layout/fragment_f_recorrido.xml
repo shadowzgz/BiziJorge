@@ -130,10 +130,19 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="10dp"/>
 
+
+                <Button
+                    android:id="@+id/btnSumatorioRecorridos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Ver total"
+                    android:textSize="12sp" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rvListadoRecorridos"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="340dp"
                     android:scrollbars="vertical" />
             </LinearLayout>
 

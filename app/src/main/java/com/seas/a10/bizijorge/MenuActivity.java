@@ -169,6 +169,17 @@ public class MenuActivity extends AppCompatActivity
                  FragmentManager fragmentManager = getSupportFragmentManager();
                  fragmentManager.beginTransaction().replace(R.id.main_content , reco).commit();
                  setTitle("Recorrido");
+             }else if (id == R.id.nav_log_out) {
+                 if(cliente != null || sData.getCliente() != null) {
+                     cliente = null;
+                     sData.setCliente(null);
+                     name.setText("Usuario sin identificar");
+                     email.setText("");
+                     Intent intentRegister = new Intent(getApplicationContext(), LoginActivity.class);
+                     startActivity(intentRegister);
+                 }else{
+                     Toast.makeText(getApplicationContext(), "No hay ningún usuario.", Toast.LENGTH_SHORT).show();
+                 }
              }
 
 
