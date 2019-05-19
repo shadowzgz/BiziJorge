@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,17 +19,26 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.seas.a10.bizijorge.MenuActivity;
 import com.seas.a10.bizijorge.R;
+import com.seas.a10.bizijorge.adapters.ListadoRecorridosAdapter;
+import com.seas.a10.bizijorge.beans.Incidencia;
+import com.seas.a10.bizijorge.beans.Recorrido;
 import com.seas.a10.bizijorge.data.sData;
 import com.seas.a10.bizijorge.utils.Post;
 
+import org.json.JSONArray;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,13 +46,16 @@ import java.util.concurrent.TimeUnit;
 public class fRecorrido extends Fragment {
 
     //region Variables
+    RecyclerView rvListadoRecorridos;
     private Button btnStop;
     private Button btnEnd;
     private Button btnReset;
+    ListadoRecorridosAdapter adapter;
     Button btnGuardarRecorrido;
     private Chronometer crono  ;
     int isStoped = 0;
     int ini = 0;
+    int guardado = 0;
     private long lastPause;
     private long tiempoRecorrido;
     private double distanciaRecorrida;
@@ -51,6 +65,7 @@ public class fRecorrido extends Fragment {
     TextView tvRecorridoDistancia;
     TextView tvRecorridoContaminacion;
     TextView tvRecorridoCalorias;
+    ArrayList<Recorrido> listadoRecorridos = new ArrayList<Recorrido>();
     //endregion
 
     public fRecorrido() {
@@ -64,6 +79,7 @@ public class fRecorrido extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_f_recorrido, container, false);
 
+        rvListadoRecorridos = (RecyclerView) v.findViewById(R.id.rvListadoRecorridos);
         btnStop = (Button) v.findViewById(R.id.btnStop);
         btnEnd = (Button) v.findViewById(R.id.btnEnd);
         btnReset = (Button) v.findViewById(R.id.btnReset);
@@ -74,6 +90,9 @@ public class fRecorrido extends Fragment {
         tvRecorridoContaminacion = (TextView) v.findViewById(R.id.tvRecorridoContaminacion);
         tvRecorridoCalorias = (TextView) v.findViewById(R.id.tvRecorridoCal);
         btnGuardarRecorrido.setVisibility(View.INVISIBLE);
+
+        getRecorridos();
+
         //Con este método configuramos el cronómetro añadiendo las horas
         crono.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener(){
             @Override
@@ -179,42 +198,80 @@ public class fRecorrido extends Fragment {
         });
         //endregion
 
+        //region Botón Guardar
         btnGuardarRecorrido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 try {
-
+                    if (guardado == 0) {
                     Date c = Calendar.getInstance().getTime();
                     SimpleDateFormat time = new SimpleDateFormat(
                             "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
                     String formattedDate = time.format(c);
 
-                    if (sData.getCliente() != null) {
+                        if (sData.getCliente() != null) {
 
 
-                        HashMap<String, String> parametros = new HashMap<String, String>();
-                        parametros.put("Action", "Recorrido.add");
-                        parametros.put("ID_USUARIO", "" + sData.getCliente().getIdUsuario());
-                        parametros.put("RecorridoTiempo", "" + tiempoRecorrido);
-                        parametros.put("RecorridoDistancia", "" + distanciaRecorrida);
-                        parametros.put("RecorridoContaminacion", "" + contaminacion);
-                        parametros.put("RecorridoCalorias", "" + calorias);
-                        parametros.put("RecorridoFecha", formattedDate);
+                            HashMap<String, String> parametros = new HashMap<String, String>();
+                            parametros.put("Action", "Recorrido.add");
+                            parametros.put("ID_USUARIO", "" + sData.getCliente().getIdUsuario());
+                            parametros.put("RecorridoTiempo", "" + tiempoRecorrido);
+                            parametros.put("RecorridoDistancia", "" + distanciaRecorrida);
+                            parametros.put("RecorridoContaminacion", "" + contaminacion);
+                            parametros.put("RecorridoCalorias", "" + calorias);
+                            parametros.put("RecorridoFecha", formattedDate);
 
-                        TareaSegundoPlano tarea = new TareaSegundoPlano(parametros);
-                        tarea.execute("http://jgarcia.x10host.com/Controller.php");
-                    }else{
-                        Toast.makeText(getContext(), "Debes estar registrado para guardar un recorrido.", Toast.LENGTH_SHORT).show();
+                            TareaSegundoPlano tarea = new TareaSegundoPlano(parametros);
+                            tarea.execute("http://jgarcia.x10host.com/Controller.php");
+                            guardado = 1;
+
+
+                        } else {
+                            Toast.makeText(getContext(), "Debes estar registrado para guardar un recorrido.", Toast.LENGTH_SHORT).show();
+                        }
+                    }   else{
+                        Toast.makeText(getContext(), "Ya se ha guardado en la base de datos.", Toast.LENGTH_SHORT).show();
                     }
-                }catch (Exception ex){
+                }catch(Exception ex){
                     Toast.makeText(getContext(), "Se ha producido un error al guardar el recorrido.", Toast.LENGTH_SHORT).show();
                 }
 
+                try{
+                    ((MenuActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_content, new fRecorrido())
+                            .commit();
+
+
+                }catch (Exception ex){
+                    Log.d(TAG, "onClick: Error al tratar de actualizar el fragmento.");
+                }
+
+
             }
         });
-
+        //endregion
+        if(listadoRecorridos.size() > 0) {
+            rvListadoRecorridos.setLayoutManager(new LinearLayoutManager(getContext()));
+            adapter = new ListadoRecorridosAdapter(listadoRecorridos);
+            rvListadoRecorridos.setAdapter(adapter);
+        }
         return v;
+    }
+
+    public void getRecorridos(){
+
+        try{
+            HashMap<String, String> parametros = new HashMap<String, String>();
+            parametros.put("Action", "Recorrido.select");
+            parametros.put("ID_USUARIO", "" + sData.getCliente().getIdUsuario());
+
+            TareaSegundoPlanoSelectRecorridos tarea = new TareaSegundoPlanoSelectRecorridos(parametros);
+            tarea.execute("http://jgarcia.x10host.com/Controller.php").get();
+        }catch (Exception ex){
+            Toast.makeText(getContext(), "Error al recibir los datos de los recorridos", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     //Hilo en segundo plano para guardar en la base de datos la incidencia
@@ -288,8 +345,90 @@ public class fRecorrido extends Fragment {
             if (progressDialog.isShowing()){
                 progressDialog.dismiss();
             }
-            Toast.makeText(getContext(), "Recorrido guardado satisfactoriamente.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "Recorrido guardado satisfactoriamente.", Toast.LENGTH_SHORT).show();
 
+        }
+    }
+
+    class TareaSegundoPlanoSelectRecorridos extends AsyncTask<String, Integer, Boolean> {
+
+        private ProgressDialog progressDialog = new ProgressDialog(getContext());
+        private HashMap<String, String> parametros = null;
+
+
+        public TareaSegundoPlanoSelectRecorridos(HashMap<String, String> parametros) {
+            this.parametros = parametros;
+        }
+
+        /*
+         * onPreExecute().
+         *  Se ejecutará antes del código principal de nuestra tarea.
+         * Se suele utilizar para preparar la ejecución de la tarea, inicializar la interfaz, etc.
+         * */
+        @Override
+        protected void onPreExecute() {
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMessage("Procesando...");
+            progressDialog.setCancelable(true);
+            progressDialog.setMax(100);
+            progressDialog.setProgress(0);
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface arg0) {
+                    TareaSegundoPlanoSelectRecorridos.this.cancel(true);
+                }
+            });
+
+
+        }
+
+        /*
+         * doInBackground().
+         * Contendrá el código principal de nuestra tarea.
+         * */
+        @Override
+        protected Boolean doInBackground(String... params) {
+            String url_select = params[0];
+            publishProgress(0);
+            try {
+                Post post = new Post();
+                publishProgress(50);
+                JSONArray result = post.getServerDataPost(parametros, url_select);
+                if(result != null) {
+                    listadoRecorridos = Recorrido.getArrayListFromJSon(result);
+                    sData.setListadoRecorridos(listadoRecorridos);
+                }else{
+                    listadoRecorridos = null;
+                    sData.setListadoRecorridos(null);
+                }
+
+            } catch (Exception e) {
+                Log.e("log_tag", "Error in http connection " + e.toString());
+                //messageUser = "Error al conectar con el servidor. ";
+            }
+            publishProgress(100);
+            return true;
+        }
+
+        /* Acualizamos el progreso de la aplicación*/
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            int progreso = values[0].intValue();
+            progressDialog.setProgress(progreso);
+        }
+
+        /*
+         * onPostExecute().
+         * Se ejecutará cuando finalice nuestra tarea, o dicho de otra forma,
+         * tras la finalización del método doInBackground().
+         * */
+        @Override
+        protected void onPostExecute(Boolean resp) {
+            //Toast.makeText(RegisterActivity.getInstance().getBaseContext(), "Registro realizado satisfactoriamente", Toast.LENGTH_SHORT).show();
+            if (progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
         }
     }
 
