@@ -161,7 +161,7 @@ public class fRecorrido extends Fragment {
                 isStoped = 1;
 
                 try {
-
+                    if(ini == 1){
 
                     long millis = SystemClock.elapsedRealtime() - crono.getBase();
                     long hours = TimeUnit.MILLISECONDS.toHours(millis);
@@ -193,6 +193,10 @@ public class fRecorrido extends Fragment {
 
                     tiempoRecorrido = millis;
                     btnGuardarRecorrido.setVisibility(View.VISIBLE);
+
+                    }else{
+                        Toast.makeText(getContext(), "¡Aun no has iniciado el contador!", Toast.LENGTH_SHORT).show();
+                    }
                 }catch (Exception ex){
                     Toast.makeText(getContext(), "Error al guardar los datos del recorrido.", Toast.LENGTH_SHORT).show();
                 }
@@ -206,35 +210,37 @@ public class fRecorrido extends Fragment {
             public void onClick(View view) {
 
                 try {
-                    if (guardado == 0) {
-                    Date c = Calendar.getInstance().getTime();
-                    SimpleDateFormat time = new SimpleDateFormat(
-                            "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
-                    String formattedDate = time.format(c);
 
-                        if (sData.getCliente() != null) {
+                        if (guardado == 0) {
+                            Date c = Calendar.getInstance().getTime();
+                            SimpleDateFormat time = new SimpleDateFormat(
+                                    "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
+                            String formattedDate = time.format(c);
 
-
-                            HashMap<String, String> parametros = new HashMap<String, String>();
-                            parametros.put("Action", "Recorrido.add");
-                            parametros.put("ID_USUARIO", "" + sData.getCliente().getIdUsuario());
-                            parametros.put("RecorridoTiempo", "" + tiempoRecorrido);
-                            parametros.put("RecorridoDistancia", "" + distanciaRecorrida);
-                            parametros.put("RecorridoContaminacion", "" + contaminacion);
-                            parametros.put("RecorridoCalorias", "" + calorias);
-                            parametros.put("RecorridoFecha", formattedDate);
-
-                            TareaSegundoPlano tarea = new TareaSegundoPlano(parametros);
-                            tarea.execute("http://jgarcia.x10host.com/Controller.php");
-                            guardado = 1;
+                            if (sData.getCliente() != null) {
 
 
+                                HashMap<String, String> parametros = new HashMap<String, String>();
+                                parametros.put("Action", "Recorrido.add");
+                                parametros.put("ID_USUARIO", "" + sData.getCliente().getIdUsuario());
+                                parametros.put("RecorridoTiempo", "" + tiempoRecorrido);
+                                parametros.put("RecorridoDistancia", "" + distanciaRecorrida);
+                                parametros.put("RecorridoContaminacion", "" + contaminacion);
+                                parametros.put("RecorridoCalorias", "" + calorias);
+                                parametros.put("RecorridoFecha", formattedDate);
+
+                                TareaSegundoPlano tarea = new TareaSegundoPlano(parametros);
+                                tarea.execute("http://jgarcia.x10host.com/Controller.php");
+                                guardado = 1;
+
+
+                            } else {
+                                Toast.makeText(getContext(), "Debes estar registrado para guardar un recorrido.", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
-                            Toast.makeText(getContext(), "Debes estar registrado para guardar un recorrido.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Ya se ha guardado en la base de datos.", Toast.LENGTH_SHORT).show();
                         }
-                    }   else{
-                        Toast.makeText(getContext(), "Ya se ha guardado en la base de datos.", Toast.LENGTH_SHORT).show();
-                    }
+
                 }catch(Exception ex){
                     Toast.makeText(getContext(), "Se ha producido un error al guardar el recorrido.", Toast.LENGTH_SHORT).show();
                 }
@@ -307,6 +313,7 @@ public class fRecorrido extends Fragment {
         return v;
     }
 
+    //Método que llama a la base de datos para recoger los recorridos de un cliente
     public void getRecorridos(){
 
         try{
