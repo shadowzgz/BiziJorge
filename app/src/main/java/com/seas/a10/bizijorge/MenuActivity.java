@@ -29,6 +29,7 @@ import com.seas.a10.bizijorge.fragments.fAvisoAdmin;
 import com.seas.a10.bizijorge.fragments.fIncidencia;
 import com.seas.a10.bizijorge.fragments.fMap;
 import com.seas.a10.bizijorge.fragments.fRecorrido;
+import com.seas.a10.bizijorge.fragments.fSobreNosotros;
 import com.seas.a10.bizijorge.fragments.first;
 
 
@@ -187,7 +188,12 @@ public class MenuActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.main_content , aviso).commit();
         setTitle("Avisos");
-    }
+    }else if (id == R.id.nav_info) {
+                 fSobreNosotros info = new fSobreNosotros();
+                 FragmentManager fragmentManager = getSupportFragmentManager();
+                 fragmentManager.beginTransaction().replace(R.id.main_content , info).commit();
+                 setTitle("Sobre nosotros");
+             }
 
 
 

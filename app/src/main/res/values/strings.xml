@@ -11,4 +11,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
+    <string name="info1">Gracias al Ayuntamiento de Zaragoza, ponemos a su disposición los datos del servicio de movilidad Bizi Zaragoza.</string>
+    <string name="info2">Con esta aplicación podra conocer la información actualizada de todas las estaciones de Bizi Zaragoza, estar al tanto de todos los problemas que afecten a la movilidad a través de la pestaña de avisos, ponerse en contacto con un Administrador rápidamente con la pestaña de incidencias, etc.</string>
+    <string name="info3">Para conocer más sobre este servicio y resolver dudas, acceda al siguiente enlace: </string>
+    <string name="bizilink">
+        <a href="https://www.bizizaragoza.com/es/content/%C2%BFque-%C3%A9s">
+            BiziZaragoza.com
+        </a>
+
+    </string>
+    <string name="info4">Puede ponerse en contacto con nosotros a través de nuestras redes sociales o a través de nuestro correo electrónico. </string>
 </resources>
