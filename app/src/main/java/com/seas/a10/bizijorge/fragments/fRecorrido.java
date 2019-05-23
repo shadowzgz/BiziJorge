@@ -405,6 +405,7 @@ public class fRecorrido extends Fragment {
         }
     }
 
+    //Hilo en segundo plano que muestra los recorridos de un usuario
     class TareaSegundoPlanoSelectRecorridos extends AsyncTask<String, Integer, Boolean> {
 
         private ProgressDialog progressDialog = new ProgressDialog(getContext());

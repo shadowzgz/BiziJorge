@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.seas.a10.bizijorge.beans.Cliente;
 import com.seas.a10.bizijorge.data.sData;
+import com.seas.a10.bizijorge.fragments.ListadoAvisos;
 import com.seas.a10.bizijorge.fragments.ListadoEstaciones;
 import com.seas.a10.bizijorge.fragments.fAvisoAdmin;
 import com.seas.a10.bizijorge.fragments.fIncidencia;
@@ -182,7 +183,7 @@ public class MenuActivity extends AppCompatActivity
                      Toast.makeText(getApplicationContext(), "No hay ningún usuario.", Toast.LENGTH_SHORT).show();
                  }
              } else if (id == R.id.nav_aviso) {
-        fAvisoAdmin aviso = new fAvisoAdmin();
+        ListadoAvisos aviso = new ListadoAvisos();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.main_content , aviso).commit();
         setTitle("Avisos");
