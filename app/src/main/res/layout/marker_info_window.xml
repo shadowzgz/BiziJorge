@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardview_light_background"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:background="@color/colorPrimary"
 
-    >
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,13 +36,16 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
 
+            android:textSize="18sp"
             tools:text="Bicis disponibles:" />
 
         <TextView
+            android:id="@+id/txtBicisDisponilesNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:id="@+id/txtBicisDisponilesNum"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -59,13 +60,16 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
 
+            android:textSize="18sp"
             tools:text="Anclajes disponibles:" />
 
         <TextView
+            android:id="@+id/txtAnclajesDisponiblesNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:id="@+id/txtAnclajesDisponiblesNum"/>
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

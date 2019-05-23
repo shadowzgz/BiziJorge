@@ -291,7 +291,7 @@ public class fRecorrido extends Fragment {
 
                     Toast.makeText(getContext(), "Tiempo total: " + sb + "\n" +
                             "Distancia total: " + (int)distancia + " metros" + "\n" +
-                            "Co2 no emitido total: " + co2 + " gramos" + "\n" +
+                            "CO2 no emitido total: " + co2 + " gramos" + "\n" +
                             "Calorías consumidas totales: " + new DecimalFormat("##.##").format(cal) + " calorías" , Toast.LENGTH_LONG).show();
 
 

@@ -77,10 +77,11 @@ public class ListadoRecorridosAdapter  extends RecyclerView.Adapter <ListadoReco
             try {
                 Date date = c.getRecorridoFecha();
                 String year = (String) DateFormat.format("yyyy", date);
-                String dayOfTheWeek = (String) DateFormat.format("EEEE", date); // Thursday
+                String month = (String) DateFormat.format("MM", date);
+                //String dayOfTheWeek = (String) DateFormat.format("EEEE", date); // Thursday
                 String day = (String) DateFormat.format("dd", date);
                 String hour = (String) DateFormat.format("HH:mm", date);
-                tvRecorridoFecha.setText("Fecha: " + hour + " " + dayOfTheWeek + " " + day + " " + year);
+                tvRecorridoFecha.setText("Fecha: " + hour + " " + day + "/" + month + "/" + year);
 
                 long millis = c.getRecorridoTiempo();
                 long hours = TimeUnit.MILLISECONDS.toHours(millis);
@@ -98,8 +99,8 @@ public class ListadoRecorridosAdapter  extends RecyclerView.Adapter <ListadoReco
                 tvRecorridoTiempo.setText("Tiempo de recorrido: " + sb);
 
                 tvRecorridoDistancia.setText("Distancia recorrida: " + (int)c.getRecorridoDistancia() + " metros");
-                tvRecorridoCo2.setText("Co2 no emitido: " + c.getRecorridoCo2() + " gramos");
-                tvRecorridoCalorias.setText("Calorias consumidas: " + new DecimalFormat("##.##").format(c.getRecorridoCalorias()) + "calorías");
+                tvRecorridoCo2.setText("CO2 no emitido: " + c.getRecorridoCo2() + " gramos");
+                tvRecorridoCalorias.setText("Calorias consumidas: " + new DecimalFormat("##.##").format(c.getRecorridoCalorias()) + " calorías");
 
             }catch (Exception ex){
                 Log.d(TAG, "bindRecorrido: Error al bindear los datos.");
