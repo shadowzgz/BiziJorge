@@ -98,7 +98,7 @@ public class ListadoAvisos extends Fragment {
         //si existe algun aviso sin caducar cargamos el recycler view
         if(listadoAvisosFiltrados.size()>0) {
             rvListadoAvisos.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new ListadoAvisosAdapter(listadoAvisosFiltrados);
+            adapter = new ListadoAvisosAdapter(getContext(), listadoAvisosFiltrados);
             rvListadoAvisos.setAdapter(adapter);
         }
         return v;

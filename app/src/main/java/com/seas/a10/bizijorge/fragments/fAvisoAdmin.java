@@ -164,7 +164,7 @@ public class fAvisoAdmin extends Fragment implements DatePickerDialog.OnDateSetL
         mesSeleccionado = mo;
         añoSeleccionado = year;
 
-        String date = "Fecha seleccionada: " + mo + "/" + dayOfMonth + "/" + year;
+        String date = "Fecha seleccionada: " + dayOfMonth + "/" + mo + "/" + year;
         tvAvisoFechaCaducidad.setText(date);
     }
 
