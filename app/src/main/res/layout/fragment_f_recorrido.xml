@@ -75,6 +75,14 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvEstimacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="*Los datos mostrados a continuacón son estimaciones y no deben ser tomados como reales."
+                    android:textAlignment="center"
+                    android:textSize="12sp" />
+
+                <TextView
                     android:id="@+id/tvRecorridoTiempo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -138,6 +146,14 @@
                     android:layout_gravity="center"
                     android:text="Ver total"
                     android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvNoRecorrido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="*No se ha encontrado ningún recorrido para este usuario."
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rvListadoRecorridos"

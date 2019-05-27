@@ -168,10 +168,14 @@ public class MenuActivity extends AppCompatActivity
             Intent intentRegister = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intentRegister);
         } else if (id == R.id.nav_chrono) {
-                 fRecorrido reco = new fRecorrido();
-                 FragmentManager fragmentManager = getSupportFragmentManager();
-                 fragmentManager.beginTransaction().replace(R.id.main_content , reco).commit();
-                 setTitle("Recorrido");
+                 if(sData.getCliente() != null) {
+                     fRecorrido reco = new fRecorrido();
+                     FragmentManager fragmentManager = getSupportFragmentManager();
+                     fragmentManager.beginTransaction().replace(R.id.main_content, reco).commit();
+                     setTitle("Recorrido");
+                 }else{
+                     Toast.makeText(getApplicationContext(), "Tienes que estar registrado para usar esta funcionalidad.", Toast.LENGTH_SHORT).show();
+                 }
              }else if (id == R.id.nav_log_out) {
                  if(cliente != null || sData.getCliente() != null) {
                      cliente = null;

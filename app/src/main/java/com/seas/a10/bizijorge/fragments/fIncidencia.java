@@ -79,14 +79,18 @@ public class fIncidencia extends Fragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if(sData.getCliente() != null && listadoIncidencias.size() > 0){
-                    ListadoIncidencias frag = new ListadoIncidencias(listadoIncidencias);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_content, frag)
-                            .addToBackStack(null)
-                            .commit();
+                if(listadoIncidencias != null) {
+                    if (sData.getCliente() != null && listadoIncidencias.size() > 0) {
+                        ListadoIncidencias frag = new ListadoIncidencias(listadoIncidencias);
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.main_content, frag)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        Toast.makeText(getContext(), "Debe estar registrado.", Toast.LENGTH_SHORT).show();
+                    }
                 }else{
-                    Toast.makeText(getContext(), "Debe estar registrado o tener alguna incidencia.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Debes tener alguna incidencia.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

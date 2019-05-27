@@ -60,14 +60,18 @@ public class LoginActivity extends AppCompatActivity {
                 /*ServiceLogin.accionLogin(edtEmail.getText().toString(), edtPass.getText().toString());*/
                 HashMap<String, String> parametros = new HashMap<String, String>();
                 parametros.put("Action","User.login");
-                parametros.put("USER",edtEmail.getText().toString());
 //                parametros.put("PASS",edtPass.getText().toString() );
+//                parametros.put("USER",edtEmail.getText().toString());
+                //region usuarios para test
+//
 //                parametros.put("USER","jgil96zgz@gmail.com");
 //                parametros.put("PASS","Jorge1234" );
-                parametros.put("USER","admin@gmail.com");
-                parametros.put("PASS","1234" );
-//                parametros.put("USER","a@svalero.com");
+//                parametros.put("USER","admin@gmail.com");
 //                parametros.put("PASS","1234" );
+                parametros.put("USER","test@test.com");
+                parametros.put("PASS","test1234" );
+                //endregion
+
 
                 TareaSegundoPlano tarea = new TareaSegundoPlano(parametros);
                 tarea.execute("http://jgarcia.x10host.com/Controller.php");
