@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,12 +24,10 @@ import com.seas.a10.bizijorge.beans.Cliente;
 import com.seas.a10.bizijorge.data.sData;
 import com.seas.a10.bizijorge.fragments.ListadoAvisos;
 import com.seas.a10.bizijorge.fragments.ListadoEstaciones;
-import com.seas.a10.bizijorge.fragments.fAvisoAdmin;
 import com.seas.a10.bizijorge.fragments.fIncidencia;
 import com.seas.a10.bizijorge.fragments.fMap;
 import com.seas.a10.bizijorge.fragments.fRecorrido;
 import com.seas.a10.bizijorge.fragments.fSobreNosotros;
-import com.seas.a10.bizijorge.fragments.first;
 
 
 public class MenuActivity extends AppCompatActivity
