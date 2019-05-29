@@ -59,7 +59,7 @@ public class EstacionFavorita {
 
     //endregiones
 
-
+    //Metodo que recoge los datos de un json y los transforma en la entidad Estacion Favorita
     public static ArrayList<EstacionFavorita> getArrayListFromJSon(JSONArray datos){
         ArrayList<EstacionFavorita> lista = null;
         EstacionFavorita estacionFavorita = null;

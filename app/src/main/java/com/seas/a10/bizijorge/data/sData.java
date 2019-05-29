@@ -10,6 +10,7 @@ import com.seas.a10.bizijorge.beans.Recorrido;
 
 import java.util.ArrayList;
 
+//Clase estática que alberga datos de diferntes entidades
 public class sData {
 
     private static Cliente  cliente;

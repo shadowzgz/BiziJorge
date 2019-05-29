@@ -30,7 +30,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-
+//Fragmento de la vista que implementa la funcionalidad de crear un aviso
+//solo se le permite el acceso al administrador
 public class fAvisoAdmin extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     //region variables

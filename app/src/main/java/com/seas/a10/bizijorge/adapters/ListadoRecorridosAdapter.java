@@ -19,8 +19,9 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.ContentValues.TAG;
-
-public class ListadoRecorridosAdapter  extends RecyclerView.Adapter <ListadoRecorridosAdapter.ListadoRecorridoViewHolder>{
+//Clase adaptador del RecyclerView que meustra el listado de los recorridos
+public class ListadoRecorridosAdapter
+        extends RecyclerView.Adapter <ListadoRecorridosAdapter.ListadoRecorridoViewHolder>{
 
     //region Variables
     ArrayList<Recorrido> listadoRecorridos;
@@ -73,6 +74,7 @@ public class ListadoRecorridosAdapter  extends RecyclerView.Adapter <ListadoReco
 
         }
 
+        //Realizamos los cálculos y estimaciones pertinentes y las asignamos al campo correspondiente
         public void bindRecorrido (Recorrido c){
             try {
                 Date date = c.getRecorridoFecha();
@@ -98,9 +100,12 @@ public class ListadoRecorridosAdapter  extends RecyclerView.Adapter <ListadoReco
                 sb.append(" Segundos");
                 tvRecorridoTiempo.setText("Tiempo de recorrido: " + sb);
 
-                tvRecorridoDistancia.setText("Distancia recorrida: " + (int)c.getRecorridoDistancia() + " metros");
+                tvRecorridoDistancia.setText("Distancia recorrida: " +
+                        (int)c.getRecorridoDistancia() + " metros");
                 tvRecorridoCo2.setText("CO2 no emitido: " + c.getRecorridoCo2() + " gramos");
-                tvRecorridoCalorias.setText("Calorias consumidas: " + new DecimalFormat("##.##").format(c.getRecorridoCalorias()) + " calorías");
+                tvRecorridoCalorias.setText("Calorias consumidas: "
+                        + new DecimalFormat("##.##").format(c.getRecorridoCalorias())
+                        + " calorías");
 
             }catch (Exception ex){
                 Log.d(TAG, "bindRecorrido: Error al bindear los datos.");

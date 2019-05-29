@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-
+//Clase con la que implementamos la funcionalidad de registro de usuario
 public class RegisterActivity extends AppCompatActivity {
     private static RegisterActivity registerActivity;
 
@@ -36,20 +36,14 @@ public class RegisterActivity extends AppCompatActivity {
         return registerActivity;
     }
 
-    //Usamos butterknife para inyectar las vistas de una manera sencilla
-//    @BindView(R.id.input_name) EditText _nameText;
-//    @BindView(R.id.input_email) EditText _emailText;
-//    @BindView(R.id.input_password) EditText _passwordText;
-//    @BindView(R.id.btn_signup) Button _signupButton;
-//    @BindView(R.id.link_login) TextView _loginLink;
+
 
     /*Método que se ejecuta al iniciar el activity*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        //Inyectamos la vista con butterknife
-       // ButterKnife.bind(this);
+
         _nameText = (EditText) findViewById(R.id.input_name);
         _emailText = (EditText) findViewById(R.id.input_email);
         _passwordText = (EditText) findViewById(R.id.input_password);

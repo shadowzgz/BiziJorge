@@ -13,18 +13,23 @@ import com.seas.a10.bizijorge.beans.Estacion;
 
 import java.util.ArrayList;
 
+//Clase con la que incorporamos una nueva ventana a los marcadores de Google Maps
 public class CustomWindowInfoAdapter implements GoogleMap.InfoWindowAdapter {
-
+    //region Variables
     private final View mWindow;
     private Context mContext;
     private ArrayList<Estacion> listadoEstaciones;
+    //rendregion
 
+    //region constructor
     public CustomWindowInfoAdapter(Context context, ArrayList<Estacion> le) {
         mContext = context;
         mWindow = LayoutInflater.from(context).inflate(R.layout.marker_info_window, null);
         listadoEstaciones = le;
     }
+    //endregion
 
+    //Inyectamos la vista y establecemos los valores para cada campo
     private void setData(Marker marker, View view){
         try {
 
@@ -58,6 +63,7 @@ public class CustomWindowInfoAdapter implements GoogleMap.InfoWindowAdapter {
 
     }
 
+    //Establecemos la vista al marcador
     @Override
     public View getInfoWindow(Marker marker) {
         setData(marker, mWindow);

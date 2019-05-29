@@ -29,7 +29,9 @@ import java.util.HashMap;
 
 import static android.content.ContentValues.TAG;
 
-public class ListadoAvisosAdapter extends RecyclerView.Adapter <ListadoAvisosAdapter.ListadoAvisosViewHolder> {
+//Adaptador para el RecyclerView del listato de avisos
+public class ListadoAvisosAdapter
+        extends RecyclerView.Adapter <ListadoAvisosAdapter.ListadoAvisosViewHolder> {
     //region variables
     Context context;
     ArrayList<Aviso> listadoAvisos;
@@ -48,7 +50,7 @@ public class ListadoAvisosAdapter extends RecyclerView.Adapter <ListadoAvisosAda
 
     //endregion
 
-
+    //Instanciamos el ViewHolder y le inyectamos la vista de los avisos
     @NonNull
     @Override
     public ListadoAvisosViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,6 +60,7 @@ public class ListadoAvisosAdapter extends RecyclerView.Adapter <ListadoAvisosAda
 
         return lavh;
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull ListadoAvisosViewHolder holder, int position) {
@@ -77,7 +80,8 @@ public class ListadoAvisosAdapter extends RecyclerView.Adapter <ListadoAvisosAda
                             EliminarAvisoAsync tarea = new EliminarAvisoAsync(parametros);
                             tarea.execute("http://jgarcia.x10host.com/Controller.php");
                         }catch (Exception ex){
-                            Toast.makeText(context, "Error al borrar la incidencia.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Error al borrar la incidencia.",
+                                    Toast.LENGTH_SHORT).show();
                         }
 
                         try{
@@ -85,7 +89,8 @@ public class ListadoAvisosAdapter extends RecyclerView.Adapter <ListadoAvisosAda
                                     .replace(R.id.main_content, new ListadoAvisos())
                                     .commit();
                         }catch (Exception ex){
-                            Toast.makeText(context, "Error al recargar la página.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Error al recargar la página.",
+                                    Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -214,7 +219,6 @@ public class ListadoAvisosAdapter extends RecyclerView.Adapter <ListadoAvisosAda
          * */
         @Override
         protected void onPostExecute(Boolean resp) {
-            // Toast.makeText(getContext(), "Mensaje enviado satisfactoriamente", Toast.LENGTH_SHORT).show();
             if (progressDialog.isShowing()){
                 progressDialog.dismiss();
             }

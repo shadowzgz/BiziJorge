@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 import static android.content.ContentValues.TAG;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragmento en el que implementamos la funcionalidad de recorrido
  */
 public class fRecorrido extends Fragment {
 
@@ -192,16 +192,19 @@ public class fRecorrido extends Fragment {
 
                         //Teniendo en cuenta que una persona de 65 kg gasta de media 6,4 calorías al minuto
                         calorias = (((double) millis / 1000) * 64) / 1000;
-                        tvRecorridoCalorias.setText("Calorías consumidas: " + new DecimalFormat("##.##").format(calorias) + " calorías");
+                        tvRecorridoCalorias.setText("Calorías consumidas: " +
+                                new DecimalFormat("##.##").format(calorias) + " calorías");
 
                         tiempoRecorrido = millis;
                         btnGuardarRecorrido.setVisibility(View.VISIBLE);
 
                     } else {
-                        Toast.makeText(getContext(), "¡Aun no has iniciado el contador!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "¡Aun no has iniciado el contador!",
+                                Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception ex) {
-                    Toast.makeText(getContext(), "Error al guardar los datos del recorrido.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error al guardar los datos del recorrido.",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });

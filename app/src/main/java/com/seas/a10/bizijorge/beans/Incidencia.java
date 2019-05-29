@@ -96,7 +96,7 @@ public class Incidencia {
 
     //endregion
 
-    /*Recibe un JSON y lo transforma a la entidad deseada*/
+    /*Recibe un JSON y lo transforma a la entidad Incidencia*/
     public static ArrayList<Incidencia> getArrayListFromJSon(JSONArray datos){
         ArrayList<Incidencia> lista = null;
 

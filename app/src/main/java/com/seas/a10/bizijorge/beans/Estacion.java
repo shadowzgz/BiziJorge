@@ -153,6 +153,7 @@ public class Estacion {
 
     //endregion
 
+    //Metodo que recoge los datos de un json y los transforma en la entidad Estacion
     public static ArrayList<Estacion> getArrayListFromJSon(JSONArray datos){
         ArrayList<Estacion> lista = null;
         Estacion estacion = null;

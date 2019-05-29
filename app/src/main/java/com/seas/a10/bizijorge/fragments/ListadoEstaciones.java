@@ -41,7 +41,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-
+//Fragmento en el que se muestra un listado con las estaciones de Bizi
 public class ListadoEstaciones extends Fragment{
 
     //region variables
@@ -126,6 +126,7 @@ public class ListadoEstaciones extends Fragment{
         return v;
     }
 
+    //Fragmento con el que recogemos todas las estaciones
     public void recogerEstacionesFavoritas() throws ExecutionException, InterruptedException {
         if(sData.getCliente() != null) {
             HashMap<String, String> parametros = new HashMap<String, String>();

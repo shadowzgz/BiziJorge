@@ -38,7 +38,7 @@ import java.util.Locale;
 import static android.content.ContentValues.TAG;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragmento en el que se muestra un lsitado con los avisos
  */
 public class ListadoAvisos extends Fragment {
 

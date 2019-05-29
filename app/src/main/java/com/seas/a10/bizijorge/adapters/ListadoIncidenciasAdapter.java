@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static android.content.ContentValues.TAG;
-
-public class ListadoIncidenciasAdapter extends RecyclerView.Adapter <ListadoIncidenciasAdapter.ListadoIncidenciasViewHolder> {
+//Clase adaptador para el RecyclerView que muestra un listado de las incidencias
+public class ListadoIncidenciasAdapter
+        extends RecyclerView.Adapter <ListadoIncidenciasAdapter.ListadoIncidenciasViewHolder> {
 
     //region Variables
     ArrayList<Incidencia> listadoIncidencias;
@@ -77,7 +78,8 @@ public class ListadoIncidenciasAdapter extends RecyclerView.Adapter <ListadoInci
 
 
     //Clase ViewHolder del adaptador de listado de incidencias
-    public class ListadoIncidenciasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ListadoIncidenciasViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private TextView asuntoIncidencia;
         private TextView fechaIncidencia;

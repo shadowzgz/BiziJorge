@@ -11,6 +11,7 @@ import java.util.Locale;
 
 //Clase de la entidad de avisos
 public class Aviso {
+
     //region variables
     private int avisoId;
     private String avistoTipo;

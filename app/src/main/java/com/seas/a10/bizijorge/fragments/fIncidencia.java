@@ -87,14 +87,17 @@ public class fIncidencia extends Fragment {
                                 .addToBackStack(null)
                                 .commit();
                     } else {
-                        Toast.makeText(getContext(), "Debe estar registrado.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Debe estar registrado.",
+                                Toast.LENGTH_SHORT).show();
                     }
                 }else{
-                    Toast.makeText(getContext(), "Debes tener alguna incidencia.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Debes tener alguna incidencia.",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+        //Recogemos los datos de la incidencia y los guardamos en la base de datos
         btnSendIncidencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,8 +131,6 @@ public class fIncidencia extends Fragment {
                                             ", rellene todos los camos antes de continuar.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-
                     } else {
                         Toast.makeText(getContext(), "Debe estar registrado para mandar una incidencia.",
                                 Toast.LENGTH_SHORT).show();
@@ -182,7 +183,8 @@ public class fIncidencia extends Fragment {
             Transport.send(message);
 
             System.out.println("Done");
-            Toast.makeText(getContext(), "Se ha enviado un email de confirmación a " + userEmailIncidencia.getText().toString() + ".", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Se ha enviado un email de confirmación a " +
+                    userEmailIncidencia.getText().toString() + ".", Toast.LENGTH_SHORT).show();
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -208,7 +210,8 @@ public class fIncidencia extends Fragment {
                 tarea.execute("http://jgarcia.x10host.com/Controller.php").get();
             }
         }else {
-            Toast.makeText(getContext(), "Debe estar registrado para usar esta funcionalidad.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Debe estar registrado para usar esta funcionalidad.",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -286,8 +289,10 @@ public class fIncidencia extends Fragment {
             if (progressDialog.isShowing()){
                 progressDialog.dismiss();
             }
-            Toast.makeText(getContext(), "Incidencia guardada satisfactoriamente.", Toast.LENGTH_SHORT).show();
-            Toast.makeText(getContext(), "Le llegará un correo de confirmación", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Incidencia guardada satisfactoriamente.",
+                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Le llegará un correo de confirmación",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -320,7 +325,6 @@ public class fIncidencia extends Fragment {
                     fIncidencia.TareaSegundoPlanoSelectIncidencias.this.cancel(true);
                 }
             });
-
 
         }
 
@@ -366,7 +370,6 @@ public class fIncidencia extends Fragment {
          * */
         @Override
         protected void onPostExecute(Boolean resp) {
-            //Toast.makeText(RegisterActivity.getInstance().getBaseContext(), "Registro realizado satisfactoriamente", Toast.LENGTH_SHORT).show();
             if (progressDialog.isShowing()){
                 progressDialog.dismiss();
             }

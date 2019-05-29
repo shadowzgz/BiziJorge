@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//Clase en la que implementamos la funcionalidad de inicio de sesión
 public class LoginActivity extends AppCompatActivity {
     private EditText edtEmail;
     private EditText edtPass;

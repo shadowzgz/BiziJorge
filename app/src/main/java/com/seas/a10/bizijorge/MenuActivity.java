@@ -29,7 +29,7 @@ import com.seas.a10.bizijorge.fragments.fMap;
 import com.seas.a10.bizijorge.fragments.fRecorrido;
 import com.seas.a10.bizijorge.fragments.fSobreNosotros;
 
-
+/*  Clase en la que cargamos el menú lateral y todos los fragmentos*/
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,15 +48,6 @@ public class MenuActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*En esta sección del create isntanciamos el botón flotante.*/
-        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -75,6 +66,7 @@ public class MenuActivity extends AppCompatActivity
        initFragmentMap();
     }
 
+    //Iniciamos el fragmento de mapa
     public void initFragmentMap() {
         try {
             fMap map = new fMap();
@@ -119,6 +111,7 @@ public class MenuActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    //Método con el que establecemos una funcionalidad para cada botón del menú lateral
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -204,6 +197,7 @@ public class MenuActivity extends AppCompatActivity
         return true;
     }
 
+    //Ponemos le nombre y email del usuario en la parte superior del menú
     public void setClientDataOnMenu(){
 
         if(cliente != null){

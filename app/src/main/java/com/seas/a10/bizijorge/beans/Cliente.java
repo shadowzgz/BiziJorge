@@ -7,8 +7,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+//Clase de la entidad de usuario
 public class Cliente {
-    //region variables m
+    //region variables
     private int idUsuario;
     private String email;
     private String pass;

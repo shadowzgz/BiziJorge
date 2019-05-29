@@ -101,7 +101,7 @@ public class Recorrido {
 
     //endregion
 
-    /*Recibe un JSON y lo transforma a la entidad deseada*/
+    /*Recibe un JSON y lo transforma a la entidad Recorrido*/
     public static ArrayList<Recorrido> getArrayListFromJSon(JSONArray datos){
         ArrayList<Recorrido> lista = null;
 

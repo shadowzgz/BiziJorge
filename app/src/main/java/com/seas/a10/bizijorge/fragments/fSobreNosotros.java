@@ -17,7 +17,7 @@ import com.seas.a10.bizijorge.R;
 import com.seas.a10.bizijorge.data.sData;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragmento con el que mostramos información varia
  */
 public class fSobreNosotros extends Fragment {
     //region variables
@@ -64,14 +64,16 @@ public class fSobreNosotros extends Fragment {
         imgTwitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "¡Funcionalidad operativa en la próxima actualización!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "¡Funcionalidad operativa en la próxima actualización!",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
         imgFace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "¡Funcionalidad operativa en la próxima actualización!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "¡Funcionalidad operativa en la próxima actualización!",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -90,7 +92,8 @@ public class fSobreNosotros extends Fragment {
             //startActivity(Intent.createChooser(i, "Mandar mensaje..."));
             startActivity(i);
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getContext(), "No existe ningún cliente de mensajería instalado...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No existe ningún cliente de mensajería instalado...",
+                    Toast.LENGTH_SHORT).show();
         }
 
     }

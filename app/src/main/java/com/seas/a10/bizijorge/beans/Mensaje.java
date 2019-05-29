@@ -92,7 +92,7 @@ public class Mensaje {
     //endregion
 
 
-    /*Recibe un JSON y lo transforma a la entidad deseada*/
+    /*Recibe un JSON y lo transforma a la entidad Mensaje*/
     public static ArrayList<Mensaje> getArrayListFromJSon(JSONArray datos){
         ArrayList<Mensaje> lista = null;
 

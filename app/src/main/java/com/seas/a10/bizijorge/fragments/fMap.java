@@ -54,9 +54,7 @@ import static android.content.ContentValues.TAG;
 
 /**
  * Fragmento que contiene el mapa en el que se muestran todas las estaciones de Bizi Zaragoza
- *http://zaragoza-sedeelectronica.github.io/rest/queries/
- * https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta.json?fl=id%2Ctitle%2Cestado%2CbicisDisponibles%2CanclajesDisponibles%2ClastUpdated%2Cgeometry&rf=html&srsname=wgs84&start=0&rows=200&distance=5000
- */
+*/
 public class fMap extends Fragment implements OnMapReadyCallback {
 
     //region variables
@@ -74,11 +72,9 @@ public class fMap extends Fragment implements OnMapReadyCallback {
     ImageButton btnBicis;
     TextView tvLastUpdated;
     int idEstacionListado;
-
     boolean dataRecieved = false;
     JSONArray jsonArray = null;
     private String respuesta = "";
-    //String pagina = "https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta.json?rows=200";
     String pagina = "https://www.zaragoza.es/sede/servicio/urbanismo-infraestructuras/estacion-bicicleta.json?fl=id%2Ctitle%2Cestado%2CbicisDisponibles%2CanclajesDisponibles%2ClastUpdated%2Cgeometry&rf=html&srsname=wgs84&start=0&rows=200&distance=5000";
     ArrayList<Estacion> listadoEstaciones;
     //endregion
@@ -267,6 +263,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 
                 }
 
+                //Mostramos la fecha de la última actualización de los datos que recibimos
                 if(actualizacionLeida == false){
                     Date date = i.getLastUpdated();
                     String dayOfTheWeek = (String) DateFormat.format("EEEE", date); // Thursday
@@ -288,6 +285,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         }
 
     }
+
     //Ponemos en el mapa las diferentes estaciones con marcadores según los anclajes de cada estación
     public void setMarkersAnclajes (){
         mMap.clear();
@@ -345,6 +343,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
 
     }
 
+    //Actualizamos la localización
     private void updateLocationUI() {
         if (mMap == null) {
             return;
@@ -364,6 +363,7 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    //Recogemos la localización del dispositivo
     private void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
@@ -413,13 +413,14 @@ public class fMap extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    //Metodo con el que recibimos si el usuario acepta o rechaza los permisos
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         mLocationPermissionGranted = false;
-        Log.d("MENSAJEEEEEEE", "SE HA LLAMADO CORRECTAMENTE AL CALLBACKKKKKK!!!!!!!!!!!!");
+        Log.d("Mensaje", "Se ha llamado al callback correctamente.");
         switch (requestCode) {
             case 1: {
                 // If request is cancelled, the result arrays are empty.

@@ -39,7 +39,8 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 //Clase que muestra un listado con las diferentes estaciones
-public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEstacionesAdapter.ListadoEstacionesViewHolder>{
+public class ListadoEstacionesAdapter
+        extends  RecyclerView.Adapter <ListadoEstacionesAdapter.ListadoEstacionesViewHolder>{
 
     //region variables
     private ArrayList<Estacion> lisadoEstaciones;
@@ -59,7 +60,7 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
 
     }
 
-    //Instanciamos el ViewHolder y le intactamos la vista de las estaciones
+    //Instanciamos el ViewHolder y le inyectamos la vista de las estaciones
     @NonNull
     @Override
     public ListadoEstacionesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -104,7 +105,8 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
                             parametros.put("idEstacion", "" + item.getId());
                             TareaSegundoPlano tarea = new TareaSegundoPlano(parametros);
                             tarea.execute("http://jgarcia.x10host.com/Controller.php");
-                            Toast.makeText(context, "Se ha guardado correctamente en favoritos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Se ha guardado correctamente en favoritos"
+                                    ,Toast.LENGTH_SHORT).show();
 
 
                             //Si es favorita se elimina de la base de datos
@@ -114,7 +116,8 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
                             parametros.put("idEstacion", "" + item.getId());
                             TareaSegundoPlano tarea = new TareaSegundoPlano(parametros);
                             tarea.execute("http://jgarcia.x10host.com/Controller.php");
-                            Toast.makeText(context, "Se ha borrado correctamente de favoritos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Se ha borrado correctamente de favoritos",
+                                    Toast.LENGTH_SHORT).show();
 
                         }
                     } catch (Exception ex) {
@@ -137,7 +140,8 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
                     }
                     notifyDataSetChanged();
                 }else{
-                    Toast.makeText(context, "Debe estar registrado para usar esta función...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Debe estar registrado para usar esta función...",
+                            Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -151,10 +155,6 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
             @Override
             public void onClick(View view) {
 
-//                AppCompatActivity activity = (AppCompatActivity) view.getContext();
-//                fragmentoMapa = fragmentoMapa.
-//                GrouponData.setPeliculaSeleccionada(item);
-//                activity.getSupportFragmentManager().beginTransaction().replace(R.id.main_content, fragmentoPeliculaDetails).addToBackStack(null).commit();
                 ((MenuActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_content, new fMap(item.getId()))
                         .commit();
@@ -169,13 +169,15 @@ public class ListadoEstacionesAdapter extends  RecyclerView.Adapter <ListadoEsta
         return lisadoEstaciones.size();
     }
 
+    //Método que guarda la lista filtrada y notifica los cambios para actualizar el listado
     public void filterList(ArrayList<Estacion> filterList){
         lisadoEstaciones = filterList;
         notifyDataSetChanged();
     }
 
     //Clase ViewHolder del adaptador de listado de estaciones
-    public class ListadoEstacionesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ListadoEstacionesViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener{
 
         private TextView tituloEstacion;
         private TextView bicisEstacion;

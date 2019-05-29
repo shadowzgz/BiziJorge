@@ -46,7 +46,7 @@ import java.util.Locale;
 import static android.content.ContentValues.TAG;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragmento en el que mostramos los detalles de una incidencia.
  */
 public class fDetallesIncidencia extends Fragment {
 
@@ -59,9 +59,7 @@ public class fDetallesIncidencia extends Fragment {
     EditText etNuevoMensaje;
     Button btnEliminarIncidencia;
     Button btnEnviarMensaje;
-
     RecyclerView rvMensajes;
-
     ListadoMensajesAdapter adapter;
     ArrayList<Mensaje> listadoMensajes;
     //endregion
@@ -146,14 +144,13 @@ public class fDetallesIncidencia extends Fragment {
                             .replace(R.id.main_content, new fDetallesIncidencia(sData.getIncidenciaDetalles()))
                             .commit();
 
-
                 }catch (Exception ex){
                     Log.d(TAG, "onClick: Error al tratar de actualizar el fragmento.");
                 }
             }
         });
 
-
+        //Eliminamos una incidencia al pulsar este botón.
         btnEliminarIncidencia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,6 +201,7 @@ public class fDetallesIncidencia extends Fragment {
         return v;
     }
 
+    //Método con el que recibimos los mensajes de una incidencia
     public void getMensajes(){
         try {
             HashMap<String, String> parametros = new HashMap<String, String>();
@@ -216,7 +214,7 @@ public class fDetallesIncidencia extends Fragment {
         }
         }
 
-    //Hilo en segundo plano para realiza    r las llamadas a la base de datos
+    //Hilo en segundo plano para realizar las llamadas a la base de datos
     class GuardarMensajeAsync extends AsyncTask<String, Integer, Boolean> {
 
         private ProgressDialog progressDialog = new ProgressDialog(getContext());

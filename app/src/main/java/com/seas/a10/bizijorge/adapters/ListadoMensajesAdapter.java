@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static android.content.ContentValues.TAG;
-
-public class ListadoMensajesAdapter extends RecyclerView.Adapter <ListadoMensajesAdapter.ListadoMensajesViewHolder> {
+//Clase adaptador para el RecyclerView que muestra un listado de mensajes
+public class ListadoMensajesAdapter
+        extends RecyclerView.Adapter <ListadoMensajesAdapter.ListadoMensajesViewHolder> {
 
     //region variables
 
@@ -91,16 +92,11 @@ public class ListadoMensajesAdapter extends RecyclerView.Adapter <ListadoMensaje
         }catch (Exception ex){
             Log.d(TAG, "Error al bindear los datos del mensaje");
         }
-
-
-
     }
 
     @Override
     public void onClick(View view) {
-
     }
 }
-
 
 }
